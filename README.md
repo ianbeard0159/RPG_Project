@@ -1,6 +1,15 @@
 # RPG_Project
 Class project for ISIT 320
 
+#Creating a .env file
+It only needs 4 lines:
+
+DB_HOST="(A host name, probably localhost unless you're being fancy)"
+DB_USER="(a username to access the database with)"
+DB_PASS="(the password for the aforementioned user)"
+DB_PORT="(The port the database is listening on, Mine is using 3306)"
+
+
 Links to the Google Docs version of the word documents in the /Documents directory are provided below.
 
 Link to design document on Google Docs: https://docs.google.com/document/d/1kXQa1XgUy67WNz3iDqlk5j8y-WlcpdNE/edit?usp=sharing&ouid=103936840555993514006&rtpof=true&sd=true
