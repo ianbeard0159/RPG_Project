@@ -1,14 +1,23 @@
 # RPG_Project
 Class project for ISIT 320
 
-#Creating a .env file
-It only needs 4 lines:
+# Database Update
+I realized that the names for characters, enemys, modifiers, and supports should be unique. I'll update the database initializer with the next push, but if you've already made the database, please run these querys on the database:  
+  
+ALTER TABLE characters ADD UNIQUE (char_name);  
+ALTER TABLE enemys ADD UNIQUE (enemy_name);  
+ALTER TABLE modifiers ADD UNIQUE (modifier_name);  
+ALTER TABLE supports ADD UNIQUE (support_name);  
 
-DB_HOST="(A host name, probably localhost unless you're being fancy)"
-DB_USER="(a username to access the database with)"
-DB_PASS="(the password for the aforementioned user)"
-DB_PORT="(The port the database is listening on, Mine is using 3306)"
-
+# Creating a .env file
+It only needs 4 lines:  
+  
+DB_HOST="(A host name, probably localhost unless you're being fancy)"  
+DB_USER="(a username to access the database with)"  
+DB_PASS="(the password for the aforementioned user)"  
+DB_PORT="(The port the database is listening on, Mine is using 3306)"  
+  
+# Google Doc Links
 
 Links to the Google Docs version of the word documents in the /Documents directory are provided below.
 
