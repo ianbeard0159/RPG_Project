@@ -1,7 +1,7 @@
 {
     "characters": [
         "id_character INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
-        "char_name VARCHAR(255)",
+        "char_name VARCHAR(255) UNIQUE",
         "description MEDIUMTEXT",
         "char_level INT",
         "strength INT",
@@ -15,7 +15,7 @@
     ],
     "enemys": [
         "id_enemy INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
-        "enemy_name VARCHAR(255)",
+        "enemy_name VARCHAR(255) UNIQUE",
         "description MEDIUMTEXT",
         "enemy_level INT",
         "strength INT",
@@ -29,7 +29,7 @@
     ],
     "attacks": [
         "id_attack INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
-        "attack_name VARCHAR(255)",
+        "attack_name VARCHAR(255) UNIQUE",
         "ap_cost INT",
         "essence_cost INT",
         "accuracy INT",
@@ -41,7 +41,7 @@
     ],
     "supports": [
         "id_support INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
-        "support_name VARCHAR(255)",
+        "support_name VARCHAR(255) UNIQUE",
         "support_type VARCHAR(255)",
         "ap_cost INT",
         "essence_cost INT",
