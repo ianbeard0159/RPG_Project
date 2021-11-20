@@ -1,4 +1,6 @@
-class Enemy extends Unit {
+const supUnit = require ('./supUnit');
+
+class Enemy extends supUnit {
 //Vaiables
 /*
 Aggro Table
@@ -18,7 +20,7 @@ Aggro Table
 			if(totalDam < 0 ){
 			this.curHealth = this.curHealth - inDamage;
 			};
-            aggroTab[caster] = aggroTab[caster] + aggro // need to pass in aggro value from attack
+            this.aggroTab[caster] = this.aggroTab[caster] + aggro // need to pass in aggro value from attack
         }
 
         
@@ -28,7 +30,7 @@ Aggro Table
 
         function populateAggro(){
             for (let i = 0; i < 3; i++){
-            aggroTab[i] = 0;
+            this.aggroTab[i] = 0;
             }
         }
 
@@ -40,7 +42,7 @@ Aggro Table
     function updateAggro(){
         for(let i = 0; i < aggroTab.length; i++){
             let lowestAggro = 100;
-            array.forEach(character=> {
+            this.aggroTab.forEach(character=> {
                 if(character < lowestAggro){
                 lowestAggro = character;
                 }
@@ -48,7 +50,7 @@ Aggro Table
         }
 
         if(character.affected == 'incapacitated'){
-            aggroTab[character.id] = 0;
+            this.aggroTab[character.id] = 0;
         }
     }
 
@@ -62,7 +64,7 @@ Aggro Table
 
         for(let i = 0; i < aggroTab.length; i++){
             let highestAggro = 0;
-            array.forEach(character=> {
+            this.aggroTab.forEach(character=> {
                 if(character > highestAggro){
                 highestAggro = character;
             } if(character == highestAggro){
@@ -80,3 +82,5 @@ Aggro Table
 
     }
 }
+
+module.exports = Enemy;
