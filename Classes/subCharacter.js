@@ -1,11 +1,11 @@
-const supUnit = require('./supUnit');
+const supUnit = require ('./supUnit');
 
 //Player Characters <Extends Unit>
 class Character extends supUnit {
 
-    constructor(ePit, bPit, str, will, dex, foc, def, agi) {
+    constructor(ePit, bPit, str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio){
 
-        super(str, will, dex, foc, def, agi);
+        super(str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio);
         //Variables
         /*
         Evade Pity
@@ -13,7 +13,7 @@ class Character extends supUnit {
         */
         this.ePity = ePit;
         this.bPity = bPit;
-
+        
     }
 
     //Methods
