@@ -1,4 +1,6 @@
-class Enemy extends Unit {
+const supUnit = require ('./supUnit');
+
+class Enemy extends supUnit {
 //Vaiables
 /*
 Aggro Table
@@ -80,3 +82,5 @@ Aggro Table
 
     }
 }
+
+module.exports = Enemy;
