@@ -2,7 +2,7 @@
 Class project for ISIT 320
 
 # Database Update
-I realized that the names for characters, enemys, modifiers, and supports should be unique. I'll update the database initializer with the next push, but if you've already made the database, please run these querys on the database:  
+I realized that the names for characters, enemys, modifiers, and supports should be unique. The code has been updated (as of 11/19/2021 at 6:00pm), but If you initialized the database before then, please run these querys on the database:  
   
 ALTER TABLE characters ADD UNIQUE (char_name);  
 ALTER TABLE enemys ADD UNIQUE (enemy_name);  
