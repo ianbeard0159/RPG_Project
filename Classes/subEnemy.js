@@ -1,4 +1,5 @@
 const supUnit = require('./supUnit');
+const supAttack = require('./supAttack');
 
 class Enemy extends supUnit {
     //Vaiables
@@ -6,8 +7,8 @@ class Enemy extends supUnit {
     Aggro Table
     */
     constructor(str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio) {
-        this.aggroTab = []
-        super(str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio)
+        super(str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio);
+        this.aggroTab = [];
     }
 
     //Methods
@@ -15,12 +16,12 @@ class Enemy extends supUnit {
     //In addition to the normal effects of TakeDamage, increase 
     //the Caster's aggro in Aggro Table
 
-    takeDamgage(inDamge, caster) {
-        totalDam = inDamage - this.def;
+    takeDamgage(inDamage, caster) {
+        let totalDam = inDamage - this.def;
         if (totalDam < 0) {
             this.curHealth = this.curHealth - inDamage;
-        };
-        this.aggroTab[caster] = this.aggroTab[caster] + aggro // need to pass in aggro value from attack
+        }
+        this.aggroTab[caster] = this.aggroTab[caster] + supAttack.aggro // need to pass in aggro value from attack
     }
 
     //- PopulateAggro()
@@ -38,17 +39,26 @@ class Enemy extends supUnit {
     //aggro of any incapacitated characters to 0.
 
     updateAggro() {
-        for (let i = 0; i < aggroTab.length; i++) {
-            let lowestAggro = 100;
-            this.aggroTab.forEach(character => {
-                if (character < lowestAggro) {
-                    lowestAggro = character;
-                }
-            });
+        // Identify the lowest aggro value in the aggro table
+        // Skip incapacitated characters
+        let lowestAggro = this.aggroTab[0].aggro;
+        for (let char in this.aggroTab) {
+            if (lowestAggro < this.aggroTable[char].aggro 
+                && this.aggroTable[char].affected != 'incapacitated') {
+                lowestAggro = this.aggroTable[char].aggro;
+            }
         }
-
-        if (character.affected == 'incapacitated') {
-            this.aggroTab[character.id] = 0;
+        // Subtract the lowest aggro value from every 
+        // character's aggro value in the table
+        // set incapacitated characters to 0
+        for (let char in this.aggroTab) {
+            if (this.aggroTable[char].affected != 'incapacitated') {
+                this.aggroTab[char].aggro -= lowestAggro;
+            }
+            // If a character is incapacitated, set their aggro to 0
+            else {
+                this.aggroTab[char].aggro = 0;
+            }
         }
     }
 
@@ -59,15 +69,19 @@ class Enemy extends supUnit {
     //If multiple characters have the same aggro, or if enemies 
     //are being targeted, then randomly select the target.
     selectedtargets(action) {
+        let highestAggro = 0;
+        let target;
 
-        for (let i = 0; i < aggroTab.length; i++) {
-            let highestAggro = 0;
+        for (let i = 0; i < action.potentialTargets.length; i++) {
             this.aggroTab.forEach(character => {
-                if (character > highestAggro) {
-                    highestAggro = character;
-                } if (character == highestAggro) {
+                if (character.aggro > highestAggro) {
+                    highestAggro = character.aggro;
+                    target = character;
+                } 
+                else if (character == highestAggro) {
                     if (Math.random() < 0.5) {
-                        highestAggro = character
+                        highestAggro = character.aggro;
+                        target = character;
                     }
                 }
             });
@@ -75,7 +89,7 @@ class Enemy extends supUnit {
 
         //multiple targerts
 
-        return highestAggro;
+        return target;
     }
 }
 
