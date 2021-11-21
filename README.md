@@ -8,7 +8,12 @@ ALTER TABLE characters ADD UNIQUE (char_name);
 ALTER TABLE enemys ADD UNIQUE (enemy_name);  
 ALTER TABLE modifiers ADD UNIQUE (modifier_name);  
 ALTER TABLE supports ADD UNIQUE (support_name);  
-
+  
+The characters and enemies also need AP, so if you initialized the database before 11/20/2021 at 5:00pm, run the following querys  
+  
+ALTER TABLE characters ADD ap_ratio INT;  
+ALTER TABLE enemys ADD ap_ratio INT;  
+  
 # Creating a .env file
 It only needs 4 lines:  
   
