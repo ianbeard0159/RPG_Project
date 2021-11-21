@@ -11,7 +11,8 @@
         "defense INT",
         "agility INT",
         "health_ratio INT",
-        "essence_ratio INT"
+        "essence_ratio INT",
+        "ap_ratio INT"
     ],
     "enemys": [
         "id_enemy INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
@@ -25,7 +26,8 @@
         "defense INT",
         "agility INT",
         "health_ratio INT",
-        "essence_ratio INT"
+        "essence_ratio INT",
+        "ap_ratio INT"
     ],
     "attacks": [
         "id_attack INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
