@@ -1,0 +1,33 @@
+{
+  "name": "rpg_project",
+  "version": "1.0.0",
+  "description": "Class project for ISIT 320",
+  "main": "startup-page.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "initialize-db": "node initialize-db.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ianbeard0159/RPG_Project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ianbeard0159/RPG_Project/issues"
+  },
+  "homepage": "https://github.com/ianbeard0159/RPG_Project#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "multer": "^1.4.3",
+    "mysql": "^2.18.1",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-plugin-react": "^7.27.0"
+  }
+}
