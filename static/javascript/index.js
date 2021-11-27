@@ -28,7 +28,9 @@ function showSlides(n) {
   dots[slideIndex-1].className += " active";
 } 
 
-// Get the modal
+//commented out modal, rempved feature, kept in case of reuse, to be deleted before final deployment
+
+/* // Get the modal
 var modal = document.getElementById("myModal");
 
 // Get the button that opens the modal
@@ -54,3 +56,4 @@ window.onclick = function(event) {
     modal.style.display = "none";
   }
 } 
+ */
