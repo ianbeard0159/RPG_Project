@@ -1,6 +1,6 @@
 {
     "characters": [
-        "id_character INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "id_characters INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
         "char_name VARCHAR(255) UNIQUE",
         "description MEDIUMTEXT",
         "char_level INT",
@@ -15,7 +15,7 @@
         "ap_ratio INT"
     ],
     "enemys": [
-        "id_enemy INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "id_enemys INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
         "enemy_name VARCHAR(255) UNIQUE",
         "description MEDIUMTEXT",
         "enemy_level INT",
@@ -30,8 +30,9 @@
         "ap_ratio INT"
     ],
     "attacks": [
-        "id_attack INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "id_attacks INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
         "attack_name VARCHAR(255) UNIQUE",
+        "description MEDIUMTEXT",
         "ap_cost INT",
         "essence_cost INT",
         "accuracy INT",
@@ -42,8 +43,9 @@
         "aggro_per_hit INT"
     ],
     "supports": [
-        "id_support INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "id_supports INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
         "support_name VARCHAR(255) UNIQUE",
+        "description MEDIUMTEXT",
         "support_type VARCHAR(255)",
         "ap_cost INT",
         "essence_cost INT",
@@ -54,7 +56,7 @@
         "aggro INT"
     ],
     "modifiers": [
-        "id_modifier INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "id_modifiers INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
         "modifier_name VARCHAR(255)",
         "stat_name VARCHAR(255)",
         "stat_value INT",
@@ -62,37 +64,37 @@
     ],
     "characters_attacks": [
         "id_juction_ca INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
-        "id_character INT",
-        "id_attack INT",
-        "FOREIGN KEY (id_character) REFERENCES characters(id_character)",
-        "FOREIGN KEY (id_attack) REFERENCES attacks(id_attack)"
+        "id_characters INT",
+        "id_attacks INT",
+        "FOREIGN KEY (id_characters) REFERENCES characters(id_characters) ON DELETE CASCADE",
+        "FOREIGN KEY (id_attacks) REFERENCES attacks(id_attacks) ON DELETE CASCADE"
     ],
     "characters_supports": [
         "id_juction_cs INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
-        "id_character INT",
-        "id_support INT",
-        "FOREIGN KEY (id_character) REFERENCES characters(id_character)",
-        "FOREIGN KEY (id_support) REFERENCES supports(id_support)"
+        "id_characters INT",
+        "id_supports INT",
+        "FOREIGN KEY (id_characters) REFERENCES characters(id_characters) ON DELETE CASCADE",
+        "FOREIGN KEY (id_supports) REFERENCES supports(id_supports) ON DELETE CASCADE"
     ],
     "enemys_attacks": [
         "id_juction_ea INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
-        "id_enemy INT",
-        "id_attack INT",
-        "FOREIGN KEY (id_enemy) REFERENCES enemys(id_enemy)",
-        "FOREIGN KEY (id_attack) REFERENCES attacks(id_attack)"
+        "id_enemys INT",
+        "id_attacks INT",
+        "FOREIGN KEY (id_enemys) REFERENCES enemys(id_enemys) ON DELETE CASCADE",
+        "FOREIGN KEY (id_attacks) REFERENCES attacks(id_attacks) ON DELETE CASCADE"
     ],
     "enemys_supports": [
         "id_juction_es INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
-        "id_enemy INT",
-        "id_support INT",
-        "FOREIGN KEY (id_enemy) REFERENCES enemys(id_enemy)",
-        "FOREIGN KEY (id_support) REFERENCES supports(id_support)"
+        "id_enemys INT",
+        "id_supports INT",
+        "FOREIGN KEY (id_enemys) REFERENCES enemys(id_enemys) ON DELETE CASCADE",
+        "FOREIGN KEY (id_supports) REFERENCES supports(id_supports) ON DELETE CASCADE"
     ],
     "supports_modifiers": [
         "id_juction_sm INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
-        "id_support INT",
-        "id_modifier INT",
-        "FOREIGN KEY (id_support) REFERENCES supports(id_support)",
-        "FOREIGN KEY (id_modifier) REFERENCES modifiers(id_modifier)"
+        "id_supports INT",
+        "id_modifiers INT",
+        "FOREIGN KEY (id_supports) REFERENCES supports(id_supports) ON DELETE CASCADE",
+        "FOREIGN KEY (id_modifiers) REFERENCES modifiers(id_modifiers) ON DELETE CASCADE"
     ]
 }
