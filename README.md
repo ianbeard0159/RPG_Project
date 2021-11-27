@@ -14,6 +14,30 @@ The characters and enemies also need AP, so if you initialized the database befo
 ALTER TABLE characters ADD ap_ratio INT;  
 ALTER TABLE enemys ADD ap_ratio INT;  
   
+I decided to rename some of the columns to make the API work easier, and to add descriptions to the attacks and supports. Here is the SQL you need to run if you initialized the database before 11/26/2021 at 12:55p
+  
+ALTER TABLE supports ADD description mediumtext;  
+ALTER TABLE attacks ADD description mediumtext;  
+  
+ALTER TABLE characters RENAME COLUMN id_character TO id_characters;  
+ALTER TABLE enemys RENAME COLUMN id_enemy TO id_enemys;  
+ALTER TABLE attacks RENAME COLUMN id_attack TO id_attacks;  
+ALTER TABLE supports RENAME COLUMN id_support TO id_supports;  
+ALTER TABLE modifiers RENAME COLUMN id_modifier TO id_modifiers;  
+  
+ALTER TABLE characters_attacks RENAME COLUMN id_character TO id_characters;  
+ALTER TABLE characters_attacks RENAME COLUMN id_attack TO id_attacks;  
+ALTER TABLE enemys_attacks RENAME COLUMN id_enemy TO id_enemys;  
+ALTER TABLE enemys_attacks RENAME COLUMN id_attack TO id_attacks;  
+  
+ALTER TABLE characters_supports RENAME COLUMN id_character TO id_characters;  
+ALTER TABLE characters_supports RENAME COLUMN id_support TO id_supports;  
+ALTER TABLE enemys_supports RENAME COLUMN id_enemy TO id_enemys;  
+ALTER TABLE enemys_supports RENAME COLUMN id_support TO id_supports;  
+  
+ALTER TABLE supports_modifiers RENAME COLUMN id_modifier TO id_modifiers;  
+ALTER TABLE supports_modifiers RENAME COLUMN id_support TO id_supports;  
+    
 # Creating a .env file
 It only needs 4 lines:  
   
