@@ -6,6 +6,7 @@ const upload = multer();
 
 // Set up routes
 const testRouter = require('./routes/testRoute');
+const gameRouter = require('./routes/gameRoute.js');
 
 // Set up static files
 app.use(express.static('static'));
@@ -17,6 +18,7 @@ app.use(upload.array());
 
 // Initialize the application
 app.use('/test', testRouter);
+app.use('/', gameRouter);
 
 app.listen(3000, function () {
     console.log("server is running on port 3000");
