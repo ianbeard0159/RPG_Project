@@ -6,7 +6,7 @@ const upload = multer();
 
 // Set up routes
 const testRouter = require('./routes/testRoute');
-const gameRouter = require('./routes/gameRoute.js');
+const gameRouter = require('./routes/gameRoute');
 
 // Set up static files
 app.use(express.static('static'));
