@@ -2,41 +2,7 @@
 Class project for ISIT 320
 
 # Database Update
-I realized that the names for characters, enemys, modifiers, and supports should be unique. The code has been updated (as of 11/19/2021 at 6:00pm), but If you initialized the database before then, please run these querys on the database:  
-  
-ALTER TABLE characters ADD UNIQUE (char_name);  
-ALTER TABLE enemys ADD UNIQUE (enemy_name);  
-ALTER TABLE modifiers ADD UNIQUE (modifier_name);  
-ALTER TABLE supports ADD UNIQUE (support_name);  
-  
-The characters and enemies also need AP, so if you initialized the database before 11/20/2021 at 5:00pm, run the following querys  
-  
-ALTER TABLE characters ADD ap_ratio INT;  
-ALTER TABLE enemys ADD ap_ratio INT;  
-  
-I decided to rename some of the columns to make the API work easier, and to add descriptions to the attacks and supports. Here is the SQL you need to run if you initialized the database before 11/26/2021 at 12:55p
-  
-ALTER TABLE supports ADD description mediumtext;  
-ALTER TABLE attacks ADD description mediumtext;  
-  
-ALTER TABLE characters RENAME COLUMN id_character TO id_characters;  
-ALTER TABLE enemys RENAME COLUMN id_enemy TO id_enemys;  
-ALTER TABLE attacks RENAME COLUMN id_attack TO id_attacks;  
-ALTER TABLE supports RENAME COLUMN id_support TO id_supports;  
-ALTER TABLE modifiers RENAME COLUMN id_modifier TO id_modifiers;  
-  
-ALTER TABLE characters_attacks RENAME COLUMN id_character TO id_characters;  
-ALTER TABLE characters_attacks RENAME COLUMN id_attack TO id_attacks;  
-ALTER TABLE enemys_attacks RENAME COLUMN id_enemy TO id_enemys;  
-ALTER TABLE enemys_attacks RENAME COLUMN id_attack TO id_attacks;  
-  
-ALTER TABLE characters_supports RENAME COLUMN id_character TO id_characters;  
-ALTER TABLE characters_supports RENAME COLUMN id_support TO id_supports;  
-ALTER TABLE enemys_supports RENAME COLUMN id_enemy TO id_enemys;  
-ALTER TABLE enemys_supports RENAME COLUMN id_support TO id_supports;  
-  
-ALTER TABLE supports_modifiers RENAME COLUMN id_modifier TO id_modifiers;  
-ALTER TABLE supports_modifiers RENAME COLUMN id_support TO id_supports;  
+The database needs some attributes that cannot be added with the ALTER TABLE command. If you initialized the DB before 11/29/2021, use the command DROP DATABASE rpg_project_db in MYSQL Workbench, and then run initialize_db.js in the project directory again to get a fresh instance
     
 # Creating a .env file
 It only needs 4 lines:  
