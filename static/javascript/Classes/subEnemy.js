@@ -1,5 +1,4 @@
 const supUnit = require('./supUnit');
-const supAttack = require('./supAttack');
 
 class Enemy extends supUnit {
     //Vaiables
@@ -9,19 +8,6 @@ class Enemy extends supUnit {
     constructor(str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio) {
         super(str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio);
         this.aggroTab = [];
-    }
-
-    //Methods
-    //- TakeDamage(inDamage, Caster)
-    //In addition to the normal effects of TakeDamage, increase 
-    //the Caster's aggro in Aggro Table
-
-    takeDamgage(inDamage, caster) {
-        let totalDam = inDamage - this.def;
-        if (totalDam < 0) {
-            this.curHealth = this.curHealth - inDamage;
-        }
-        this.aggroTab[caster] = this.aggroTab[caster] + supAttack.aggro // need to pass in aggro value from attack
     }
 
     //- PopulateAggro()
@@ -68,28 +54,57 @@ class Enemy extends supUnit {
     //the most aggro for the action being performed
     //If multiple characters have the same aggro, or if enemies 
     //are being targeted, then randomly select the target.
-    selectedtargets(action) {
-        let highestAggro = 0;
-        let target;
+    selectTargets(action) {
+        let targets = [];
+        // Make a temporary aggro table that entries can 
+        //    be removed from as needed
+        let tempTable = this.aggroTab;
+        // Make a table for any equal entries
+        let equalAggro;
 
-        for (let i = 0; i < action.potentialTargets.length; i++) {
-            this.aggroTab.forEach(character => {
-                if (character.aggro > highestAggro) {
-                    highestAggro = character.aggro;
-                    target = character;
-                } 
-                else if (character == highestAggro) {
-                    if (Math.random() < 0.5) {
-                        highestAggro = character.aggro;
-                        target = character;
+        // Select a target from the table for each available target
+        for (let i = 0; i < action.targets; i++) {
+            // Stop selecting targets if there are no more targets to select
+            if (i >= this.aggroTab.length) break;
+
+            let highestAggro = 0;
+            // Make sure that the array has a spot for the new entry
+            targets.push('');
+            for (let character in tempTable) {
+                // Remove all entries from equalAggro
+                equalAggro = [''];
+                if (tempTable[character].state != "Incapacitated") {
+                    if (tempTable[character].aggro > highestAggro) {
+                        targets[i] = tempTable[character];
+                        // Make an initial value for equalAggro
+                        //    (this block will only run if there
+                        //     aren't any equal entries yet)
+                        equalAggro[0] = tempTable[character];
+                    }
+                    // Create a list of targets who have equal aggro
+                    else if (tempTable[character].aggro == highestAggro) {
+                        equalAggro[i] = tempTable[character];
                     }
                 }
-            });
+            }
+            // If there is more than one entry in the equalAggro list
+            //    Randomly choose one to be the target
+            //    and remove that character from the temp table
+            if(equalAggro.length > 1) {
+                let j = Math.floor(Math.random() * equalAggro.length);
+                targets[i] = equalAggro[j];
+            }
         }
-
         //multiple targerts
 
-        return target;
+    }
+    selectAttackTargets(action) {
+        let targets = this.selectTargets(action);
+        this.performAttack(action, targets);
+    }
+    selectSupportTargets(action) {
+        let targets = this.selectTargets(action);
+        this.performSupport(action, targets);
     }
 }
 
