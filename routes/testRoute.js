@@ -6,6 +6,7 @@ const pool = require('../database-data/connection');
 
 // test route landing page
 router.get('/', function (req, res) {
+    //the only HTML on the page
     res.send(`<p><a href="/test/view/characters">Characters</a></p>\
     <p><a href="/test/view/enemys">Enemys</a></p>
     <p><a href="/test/view/attacks">Attacks</a></p>
