@@ -1,25 +1,14 @@
-import { Action } from "./supAction";
+const Action = require('./supAction.js');
 
-export class Support extends Action {
-    constructor(ap, essenceCost, caster, category, revive, targets, targetconditions, BaseHeal) {
-      super(ap, essenceCost, caster, category, revive, targets, targetconditions);
-      BaseHeal;
-      this.Mod = {
-          nameMod: [],
-          statMod:[],
-          valueMod:[],
-          durationMod:[]
-      };
-    }
-    Heal(Targets, BaseHeal, MyWill) {
-      
-    }
-    Modify(Targets, Modlist){
-
-    }
-    Revive(Targets) {
-
+class subSupport extends Action {
+    constructor(AP_cost, ESS_cost, targets, base_heal, support_type, revive, modifier, aggro) {
+      super(AP_cost, ESS_cost, targets);
+      this.base_heal = base_heal;
+      this.support_type = support_type;
+      this.revive = revive;
+      this.modifier = modifier;
+      this.aggro = aggro;
     }
   }
 
-  module.exports = Support;
+  module.exports = subSupport;

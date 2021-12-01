@@ -1,4 +1,3 @@
-const Modifier = require ('./modifier');
 const Attack = require('./subAttack');
 const Support = require('./subSupport');
 
@@ -20,50 +19,62 @@ class supUnit {
 		// Modifers 
 		this.modifiers = [];
 		// Actions
-		this.attacks = [];
-		this.supports = [];
+		this.attackList = {};
+		this.supportList = {};
 
 		// Resources
 		this.HP_max = ratio_HP * Math.round(Math.sqrt(lvl));
-		this.HP_current;
+		this.HP_current = this.HP_max;
 		this.AP_max = ratio_AP * Math.round(Math.sqrt(lvl));
-		this.AP_current;
+		this.AP_current = this.AP_max; 
 		this.ESS_max = ratio_ESS * Math.round(Math.sqrt(lvl));
-		this.ESS_current;
-		this.tension;
+		this.ESS_current = this.ESS_max;
+		this.tension = 0.5;
 
 		// effects
 		this.resistances = {};
-		this.state = {}; 
+		this.state = {
+			status: "Active"
+		}; 
 	}
 
 	// Take input from API request to assign actions to the character
 	populateAttacks(inAttacks) {
 		for (let att in inAttacks) {
-			this.attacks.push(new Attack(att.attack_name /*Attack parameters*/));
+			this.attackList[att] = new Attack(
+				inAttacks[att].AP_cost,
+				inAttacks[att].ESS_cost,
+				inAttacks[att].accuracy,
+				inAttacks[att].damage_ratio,
+				inAttacks[att].crit_chance,
+				inAttacks[att].targets,
+				inAttacks[att].hits,
+				inAttacks[att].aggro_per_hit
+			);
 		}
 	}
 	populateSupports(inSupports) {
 		for (let sup in inSupports) {
-			this.supports.push(new Support(sup.sup_name /*Support parameters*/));
+			this.supportList.push(new Support(sup));
 
 			// If the support has modifiers attached to it, assign 
 			//    those modifiers here
 		}
 	}
-
+/*
 	addModifier(inMod) {
 		this.modifiers.push(new Modifier(inMod.name, inMod.stat, inMod.effect, inMod.duration));
 	}
-
+*/
 	//Run This.SelectTargets(), then perform one of the unit's available actions.
 	performAttack(att, targets) {
 		// Make the player select a different action if they don't have enough AP
-		if (this.AP_current - att.cost_AP < 0) {
+		if (this.AP_current - this.attackList[att].cost_AP < 0) {
+			console.log('oops');
 			return "not enough ap";
 		}
 		// Apply essence burn if the generate too much essence
-		let ESS_total = this.ESS_current + att.ESS_cost;
+		let ESS_total = this.ESS_current + this.attackList[att].ESS_cost;
 		if (ESS_total > this.ESS_max) {
 			this.ESS_current = this.ESS_max;
 			let ESS_diff = ESS_total - this.ESS_max;
@@ -75,7 +86,7 @@ class supUnit {
 			let aimStat;
 			let dmgMods = [];
 			// Use Strength and Dexterity for physical attacks
-			if (att.type == "physical") {
+			if (this.attackList[att].type == "physical") {
 				attackStat = this.str;
 				aimStat = this.dex;
 				// Apply any relevant modifiers
@@ -110,7 +121,21 @@ class supUnit {
 					}
 				}
 			}
-			att.dealDamage(attackStat, aimStat, dmgMods, target);
+			let damageData = this.attackList[att].dealDamage(attackStat, aimStat, dmgMods, targets[target], this.tension, this.lvl);
+			let returnStr = "Hit";
+			
+			if (damageData.damage == 0) {
+				returnStr = "Miss";
+			}
+			else if (damageData.crit == 2) {
+				returnStr = "Crit";
+			}
+			
+			return {
+				damage: damageData.damage,
+				target: targets[target].char_name,
+				result: returnStr
+			};
 		}
 
 
@@ -137,10 +162,11 @@ class supUnit {
 	// Change the unit's status if necessary
 	checkHealth() {
 		if(this.HP_current <= 0) {
-			this.state = 'Incapacitated';
+			this.HP_current = 0;
+			this.state.status = 'Incapacitated';
 		}
 		if (this.HP_current > 0 && this.state == 'Incapacitated'){
-			this.state = 'Active';
+			this.state.status = 'Active';
 		}
 	}
 	//Call ChangeDuration, and removes any with a duration <= 0.

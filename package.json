@@ -2,9 +2,9 @@
   "name": "rpg_project",
   "version": "1.0.0",
   "description": "Class project for ISIT 320",
-  "main": "startup-page.js",
+  "main": "api.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "initialize-db": "node initialize-db.js"
   },
   "repository": {
@@ -18,16 +18,22 @@
   },
   "homepage": "https://github.com/ianbeard0159/RPG_Project#readme",
   "dependencies": {
+    "@babel/preset-env": "^7.16.4",
+    "babel-jest": "^27.4.2",
     "body-parser": "^1.19.0",
     "dotenv": "^10.0.0",
+    "eslint-plugin-jest": "^25.3.0",
     "express": "^4.17.1",
     "http": "0.0.1-security",
     "multer": "^1.4.3",
     "mysql": "^2.18.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0"
   },
   "devDependencies": {
     "eslint": "^8.3.0",
-    "eslint-plugin-react": "^7.27.0"
+    "eslint-plugin-react": "^7.27.0",
+    "jest": "^27.4.2"
   }
 }

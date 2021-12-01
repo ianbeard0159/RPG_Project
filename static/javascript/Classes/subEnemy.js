@@ -13,9 +13,16 @@ class Enemy extends supUnit {
     //- PopulateAggro()
     //At the start of battle, add all chracters to the table at 0.
 
-    populateAggro() {
-        for (let i = 0; i < 3; i++) {
-            this.aggroTab[i] = 0;
+    populateAggro(characterList) {
+        for (let char in characterList) {
+            this.aggroTab.push({
+                char_name: char,
+                char_def: characterList[char].def,
+                char_agi: characterList[char].agi,
+                char_tension: characterList[char].tension,
+                char_status: characterList[char].state.status,
+                aggro: 0
+            });
         }
     }
 
@@ -30,7 +37,7 @@ class Enemy extends supUnit {
         let lowestAggro = this.aggroTab[0].aggro;
         for (let char in this.aggroTab) {
             if (lowestAggro < this.aggroTable[char].aggro 
-                && this.aggroTable[char].affected != 'incapacitated') {
+                && this.aggroTable[char].char_status != 'incapacitated') {
                 lowestAggro = this.aggroTable[char].aggro;
             }
         }
@@ -38,7 +45,7 @@ class Enemy extends supUnit {
         // character's aggro value in the table
         // set incapacitated characters to 0
         for (let char in this.aggroTab) {
-            if (this.aggroTable[char].affected != 'incapacitated') {
+            if (this.aggroTable[char].char_status != 'incapacitated') {
                 this.aggroTab[char].aggro -= lowestAggro;
             }
             // If a character is incapacitated, set their aggro to 0
@@ -55,7 +62,7 @@ class Enemy extends supUnit {
     //If multiple characters have the same aggro, or if enemies 
     //are being targeted, then randomly select the target.
     selectTargets(action) {
-        let targets = [];
+        let targetList = [];
         // Make a temporary aggro table that entries can 
         //    be removed from as needed
         let tempTable = this.aggroTab;
@@ -63,27 +70,26 @@ class Enemy extends supUnit {
         let equalAggro;
 
         // Select a target from the table for each available target
-        for (let i = 0; i < action.targets; i++) {
+        for (let i = 0; i < this.attackList[action].targets; i++) {
             // Stop selecting targets if there are no more targets to select
             if (i >= this.aggroTab.length) break;
 
             let highestAggro = 0;
             // Make sure that the array has a spot for the new entry
-            targets.push('');
-            for (let character in tempTable) {
+            targetList.push('');
+            for (let char in tempTable) {
                 // Remove all entries from equalAggro
                 equalAggro = [''];
-                if (tempTable[character].state != "Incapacitated") {
-                    if (tempTable[character].aggro > highestAggro) {
-                        targets[i] = tempTable[character];
+                if (tempTable[char].char_status != "Incapacitated") {
+                    if (tempTable[char].aggro > highestAggro) {
                         // Make an initial value for equalAggro
                         //    (this block will only run if there
                         //     aren't any equal entries yet)
-                        equalAggro[0] = tempTable[character];
+                        equalAggro[0] = tempTable[char];
                     }
                     // Create a list of targets who have equal aggro
-                    else if (tempTable[character].aggro == highestAggro) {
-                        equalAggro[i] = tempTable[character];
+                    else if (tempTable[char].aggro == highestAggro) {
+                        equalAggro[i] = tempTable[char];
                     }
                 }
             }
@@ -92,15 +98,18 @@ class Enemy extends supUnit {
             //    and remove that character from the temp table
             if(equalAggro.length > 1) {
                 let j = Math.floor(Math.random() * equalAggro.length);
-                targets[i] = equalAggro[j];
+                targetList[i] = equalAggro[j];
+            }
+            else {
+                targetList[i] = equalAggro[0];
             }
         }
-        //multiple targerts
+        return targetList;
 
     }
     selectAttackTargets(action) {
         let targets = this.selectTargets(action);
-        this.performAttack(action, targets);
+        return this.performAttack(action, targets);
     }
     selectSupportTargets(action) {
         let targets = this.selectTargets(action);

@@ -1,12 +1,8 @@
-export class Action {
-    constructor( ap, essenceCost, caster, category, revive, targets, targetconditions) {
-      this.AP = ap;
-      this.essenceCost = essenceCost;
-      this.caster = caster;
-      this.category = category;
-      this.revive = revive;
+class supAction {
+    constructor(AP_cost, ESS_cost, targets) {
+      this.AP_cost = AP_cost;
+      this.ESS_cost = ESS_cost;
       this.targets = targets;
-      this.targetconditions = targetconditions;
     }
     SpendResources() {
       
@@ -19,4 +15,4 @@ export class Action {
     }
   }
 
-  module.exports = Action;
+  module.exports = supAction;
