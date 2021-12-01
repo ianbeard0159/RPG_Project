@@ -67,29 +67,28 @@ class Enemy extends supUnit {
         //    be removed from as needed
         let tempTable = this.aggroTab;
         // Make a table for any equal entries
-        let equalAggro;
 
         // Select a target from the table for each available target
         for (let i = 0; i < this.attackList[action].targets; i++) {
+            let equalAggro = [];
             // Stop selecting targets if there are no more targets to select
-            if (i >= this.aggroTab.length) break;
+            if (tempTable.length == 0) break;
 
             let highestAggro = 0;
             // Make sure that the array has a spot for the new entry
             targetList.push('');
             for (let char in tempTable) {
                 // Remove all entries from equalAggro
-                equalAggro = [''];
                 if (tempTable[char].char_status != "Incapacitated") {
                     if (tempTable[char].aggro > highestAggro) {
                         // Make an initial value for equalAggro
                         //    (this block will only run if there
                         //     aren't any equal entries yet)
-                        equalAggro[0] = tempTable[char];
+                        equalAggro = [ tempTable[char] ];
                     }
                     // Create a list of targets who have equal aggro
                     else if (tempTable[char].aggro == highestAggro) {
-                        equalAggro[i] = tempTable[char];
+                        equalAggro.push(tempTable[char]);
                     }
                 }
             }
@@ -103,6 +102,8 @@ class Enemy extends supUnit {
             else {
                 targetList[i] = equalAggro[0];
             }
+            let index = tempTable.indexOf(targetList[i]);
+            tempTable.splice(index, 1);
         }
         return targetList;
 

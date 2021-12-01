@@ -29,7 +29,7 @@ class supUnit {
 		this.AP_current = this.AP_max; 
 		this.ESS_max = ratio_ESS * Math.round(Math.sqrt(lvl));
 		this.ESS_current = this.ESS_max;
-		this.tension = 0.5;
+		this.tension = 1;
 
 		// effects
 		this.resistances = {};
@@ -81,6 +81,7 @@ class supUnit {
 			this.essenceBurn(ESS_diff);
 		}
 		// Attack each target
+		let returnData = {};
 		for (let target in targets) {
 			let attackStat;
 			let aimStat;
@@ -121,24 +122,50 @@ class supUnit {
 					}
 				}
 			}
-			let damageData = this.attackList[att].dealDamage(attackStat, aimStat, dmgMods, targets[target], this.tension, this.lvl);
-			let returnStr = "Hit";
-			
-			if (damageData.damage == 0) {
-				returnStr = "Miss";
+			let targetData = {};
+			for (let hit = 0; hit < this.attackList[att].hits; hit++) {
+				let damageData = this.attackList[att].dealDamage(attackStat, aimStat, dmgMods, targets[target], this.tension, this.lvl);
+				let returnStr = "Hit";
+
+				if (damageData.damage == 0) {
+					returnStr = "Miss";
+				}
+				else if (damageData.crit == 2) {
+					returnStr = "Crit";
+				}
+				targetData[hit] = {
+						damage: damageData.damage,
+						result: returnStr
+				};
 			}
-			else if (damageData.crit == 2) {
-				returnStr = "Crit";
+			if(!returnData[targets[target].char_name]) {
+				returnData[targets[target].char_name] = targetData;
 			}
-			
-			return {
-				damage: damageData.damage,
-				target: targets[target].char_name,
-				result: returnStr
-			};
+			else {
+				let index = Object.keys(returnData[targets[target].char_name]).length;
+				for (let i in targetData) {
+					returnData[targets[target].char_name][i + index] = targetData[i];
+				}
+			}
 		}
+		return returnData;
 
 
+	}
+	// Change the unit's tension, min 0.5, max 1.5
+	changeTension(change) {
+		let newTension = Math.round((this.tension + change) * 100) /100;
+		console.log(this.tension + " - " + newTension);
+		// Enforce min/max
+		if (newTension > 1.5) {
+			newTension = 1.5;
+		}
+		if (newTension < 0.5) {
+			newTension = 0.5;
+		}
+		// Set tension and return the value
+		this.tension = newTension;
+		return newTension;
 	}
 	//Reduces damage from attack based on defense, resistances, evasion chance, and block chance. Then reduces CurrentHealth by the remaining number. 
 	takeDamage(inDamage) {
@@ -150,8 +177,67 @@ class supUnit {
 				totalDamage -= inDamage * res;
 			}
 		}
+		// Try to block or evade 
+		const percentHP = totalDamage / this.HP_max;
+		let result = "miss";
+		let changeMultiplier = -10;
+		let rollA = Math.floor(Math.random()*100);
+		let rollB = Math.floor(Math.random()*100);
+		let totalEvasion = this.evasion;
+		for (let mod in this.modifiers) {
+			if (this.modifiers[mod].stat == "evasion")
+			totalEvasion += this.evasion * this.modifiers[mod].effect;
+		}
+		// Evades if either roll is below totalEvasion
+		if (totalDamage != 0) {
+			if (totalEvasion > rollA || totalEvasion > rollB) {
+				totalDamage = 0;
+				result = "evaded";
+				changeMultiplier = 10;
+			}
+			else {
+				rollA = Math.floor(Math.random()*100);
+				rollB = Math.floor(Math.random()*100);
+				let totalBlock = this.block;
+				for (let mod in this.modifiers) {
+					if (this.modifiers[mod].stat == "block")
+					totalBlock += this.block * this.modifiers[mod].effect;
+				}
+				// Blocks is both rolls are below totalBlock
+				if (totalBlock > rollA && totalBlock > rollB) {
+					totalDamage = 0;
+					result = "blocked";
+					changeMultiplier = 10;
+				}
+				// Partially blocks if only one roll is below totalBlock
+				else if (totalBlock > rollA || totalBlock > rollB) {
+					totalDamage = Math.round(totalDamage / 2);
+					result = "partially blocked";
+					changeMultiplier = -10;
+				}
+				else {
+					result = "taken";
+					changeMultiplier = -10;
+				}
+			}
+		}
+		let change = Math.ceil(((percentHP / changeMultiplier)) * 100) / 100;
+		// Lower Tension based on damage
+		if (result == "miss" || totalDamage != 0) {
+			change -= 0.01;
+		}
+		const tensionChange = this.changeTension(change);
+
+		// Lower health based on damage
 		this.HP_current -= totalDamage;
 		this.checkHealth();
+		const takeData = {
+			damage: totalDamage,
+			tension: tensionChange,
+			result: result
+		}
+
+		return takeData;
 	}
 
 	// Essence will build up from spell casts, which will damage character

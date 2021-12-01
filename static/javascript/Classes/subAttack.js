@@ -19,7 +19,7 @@ class Attack extends supAction {
         const rollA = Math.floor(Math.random()*100);
         const rollB = Math.floor(Math.random()*100);
 
-        console.log(`Hit Chance: ${hitChance} (${rollA})(${rollB})`);
+        // console.log(`Hit Chance: ${hitChance} (${rollA})(${rollB})`);
 
         if (hitChance >= rollA && hitChance >= rollB) {
             return 1.1;
@@ -46,7 +46,7 @@ class Attack extends supAction {
         const didHit = this.hit(target, aimStat, tension)
         const didCrit = this.crit();
 
-        console.log(`${didHit} * ${didCrit} * sqrt( ${attackStat} / ${target.char_def} ) * ${this.damage_ratio * lvl / 2}`)
+        // console.log(`${didHit} * ${didCrit} * sqrt( ${attackStat} / ${target.char_def} ) * ${this.damage_ratio * lvl / 2}`)
 
         let baseDamage = Math.round(didHit*didCrit*(Math.sqrt(attackStat/target.char_def)*(this.damage_ratio * lvl / 2)));
 
