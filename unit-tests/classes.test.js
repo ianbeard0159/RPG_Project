@@ -1,4 +1,4 @@
-const Game = require('../static/javascript/Classes/Game');
+import { GameClass } from '../static/javascript/Classes/GameClass.js';
 
 test('Is this thing on?', () => {
     expect(true).toBe(true);
@@ -127,7 +127,7 @@ const inEnemys = {
 // Test Enemy Input
 
 // Make a list of character objects
-const testGame = new Game();
+const testGame = new GameClass();
 testGame.populateCharacters(inCharacters);
 testGame.populateEnemys(inEnemys);
 

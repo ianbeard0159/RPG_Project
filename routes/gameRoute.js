@@ -7,7 +7,7 @@ router.get('/' , function (req, res) {
 });
 
 router.get('/game' , function (req, res) {
-    res.sendFile(path.join(`${__dirname}/../static/html/game.html`));
+    res.sendFile(path.join(`${__dirname}/../static/html/gamePage.html`));
 });
 
 router.get('/select' , function (req, res) {

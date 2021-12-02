@@ -1,8 +1,8 @@
-const Attack = require('./subAttack');
-const Support = require('./subSupport');
+import {Attack} from './subAttack.js'
+import {Support} from './subSupport.js'
 
 //Super Unit class that will give heritage to Character and Enemy
-class supUnit {
+export class supUnit {
 
     constructor(str, will, dex, foc, def, agi, lvl, ratio_HP, ratio_ESS, ratio_AP){
 		// Stats
@@ -55,7 +55,16 @@ class supUnit {
 	}
 	populateSupports(inSupports) {
 		for (let sup in inSupports) {
-			this.supportList.push(new Support(sup));
+			this.supportList[sup] = new Support(
+				inSupports[sup].AP_cost,
+				inSupports[sup].ESS_cost,
+				inSupports[sup].targets,
+				inSupports[sup].base_heal,
+				inSupports[sup].support_type,
+				inSupports[sup].revive,
+				inSupports[sup].modifier,
+				inSupports[sup].aggro,
+			);
 
 			// If the support has modifiers attached to it, assign 
 			//    those modifiers here
@@ -287,7 +296,3 @@ class supUnit {
 	}
 
 }
-
-
-
-module.exports = supUnit;

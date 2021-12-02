@@ -1,6 +1,6 @@
-const supAction = require('./supAction.js');
+import {Action} from './supAction.js'
 
-class Attack extends supAction {
+export class Attack extends Action {
     constructor(AP_cost, ESS_cost, accuracy, damage_ratio, crit_chance, targets, hits, aggro_per_hit) {
         super(AP_cost, ESS_cost, targets);
 
@@ -58,5 +58,3 @@ class Attack extends supAction {
     }
 
   }
-
-  module.exports = Attack;
