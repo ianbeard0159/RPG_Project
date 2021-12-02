@@ -1,0 +1,100 @@
+{
+    "characters": [
+        "id_characters INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "char_name VARCHAR(255) UNIQUE",
+        "description MEDIUMTEXT",
+        "char_level INT",
+        "strength INT",
+        "willpower INT",
+        "dexterity INT",
+        "focus INT",
+        "defense INT",
+        "agility INT",
+        "health_ratio INT",
+        "essence_ratio INT",
+        "ap_ratio INT"
+    ],
+    "enemys": [
+        "id_enemys INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "enemy_name VARCHAR(255) UNIQUE",
+        "description MEDIUMTEXT",
+        "enemy_level INT",
+        "strength INT",
+        "willpower INT",
+        "dexterity INT",
+        "focus INT",
+        "defense INT",
+        "agility INT",
+        "health_ratio INT",
+        "essence_ratio INT",
+        "ap_ratio INT"
+    ],
+    "attacks": [
+        "id_attacks INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "attack_name VARCHAR(255) UNIQUE",
+        "description MEDIUMTEXT",
+        "ap_cost INT",
+        "essence_cost INT",
+        "accuracy INT",
+        "dammage_ratio INT",
+        "crit_chance INT",
+        "targets INT",
+        "hits INT",
+        "aggro_per_hit INT"
+    ],
+    "supports": [
+        "id_supports INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "support_name VARCHAR(255) UNIQUE",
+        "description MEDIUMTEXT",
+        "support_type VARCHAR(255)",
+        "ap_cost INT",
+        "essence_cost INT",
+        "base_heal INT",
+        "targets INT",
+        "revive BOOL",
+        "modifier BOOL",
+        "aggro INT"
+    ],
+    "modifiers": [
+        "id_modifiers INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "modifier_name VARCHAR(255)",
+        "stat_name VARCHAR(255)",
+        "stat_value INT",
+        "stat_duration INT"
+    ],
+    "characters_attacks": [
+        "id_juction_ca INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "id_characters INT",
+        "id_attacks INT",
+        "FOREIGN KEY (id_characters) REFERENCES characters(id_characters) ON DELETE CASCADE",
+        "FOREIGN KEY (id_attacks) REFERENCES attacks(id_attacks) ON DELETE CASCADE"
+    ],
+    "characters_supports": [
+        "id_juction_cs INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "id_characters INT",
+        "id_supports INT",
+        "FOREIGN KEY (id_characters) REFERENCES characters(id_characters) ON DELETE CASCADE",
+        "FOREIGN KEY (id_supports) REFERENCES supports(id_supports) ON DELETE CASCADE"
+    ],
+    "enemys_attacks": [
+        "id_juction_ea INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "id_enemys INT",
+        "id_attacks INT",
+        "FOREIGN KEY (id_enemys) REFERENCES enemys(id_enemys) ON DELETE CASCADE",
+        "FOREIGN KEY (id_attacks) REFERENCES attacks(id_attacks) ON DELETE CASCADE"
+    ],
+    "enemys_supports": [
+        "id_juction_es INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "id_enemys INT",
+        "id_supports INT",
+        "FOREIGN KEY (id_enemys) REFERENCES enemys(id_enemys) ON DELETE CASCADE",
+        "FOREIGN KEY (id_supports) REFERENCES supports(id_supports) ON DELETE CASCADE"
+    ],
+    "supports_modifiers": [
+        "id_juction_sm INT NOT NULL AUTO_INCREMENT PRIMARY KEY",
+        "id_supports INT",
+        "id_modifiers INT",
+        "FOREIGN KEY (id_supports) REFERENCES supports(id_supports) ON DELETE CASCADE",
+        "FOREIGN KEY (id_modifiers) REFERENCES modifiers(id_modifiers) ON DELETE CASCADE"
+    ]
+}

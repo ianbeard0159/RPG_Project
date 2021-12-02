@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Create Supports</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    </head>
+    <body>
+        <form action="/test/entryResponse/supports" method="post">
+            <label for="support_name">Name</label>
+            <br>
+            <input type="text" id="support_name" name="support_name" />
+            <br>
+            
+            <label for="description">Description</label>
+            <br>
+            <textarea id="description" name="description" rows="5" cols="30"></textarea>
+            <br>
+
+            <label for="support_type">Type</label>
+            <br>
+            <input type="text" id="support_type" name="support_type" />
+            <br>
+            
+            <label for="ap_cost">AP Cost</label>
+            <br>
+            <input type="number" id="ap_cost" name="ap_cost" />
+            <br>
+            
+            <label for="essence_cost">Essence Cost</label>
+            <br>
+            <input type="number" id="essence_cost" name="essence_cost" />
+            <br>
+            
+            <label for="base_heal">Base Heal</label>
+            <br>
+            <input type="number" id="base_heal" name="base_heal" />
+            <br>
+            
+            <label for="targets">Targets</label>
+            <br>
+            <input type="number" id="targets" name="targets" />
+            <br>
+            
+            <label for="aggro">Aggro</label>
+            <br>
+            <input type="number" id="aggro" name="aggro" />
+            <br>
+
+            <label for="revive">Revive?</label>
+            <br>
+            <input type="radio" id="true" name="revive" value="1" />
+            <label for="true" >True</label>
+            <input type="radio" id="false" name="revive" value="0" />
+            <label for="false" >False</label>
+            <br>
+
+            <label for="revive">Modifier?</label>
+            <br>
+            <input type="radio" id="true" name="modifier" value="1" />
+            <label for="true" >True</label>
+            <input type="radio" id="false" name="modifier" value="0" />
+            <label for="false" >False</label>
+            <br>
+            
+            <br>
+            <input type="submit" value="Submit">
+            
+        </form>
+    </body>
+</html>

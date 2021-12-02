@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Create attacks</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    </head>
+    <body>
+        <form action="/test/entryResponse/attacks" method="post">
+            <label for="attack_name">Name</label>
+            <br>
+            <input type="text" id="attack_name" name="attack_name" />
+            <br>
+            
+            <label for="description">Description</label>
+            <br>
+            <textarea id="description" name="description" rows="5" cols="30"></textarea>
+            <br>
+        
+            <label for="attack_type">Attack type</label>
+            <br>
+            <input type="text" id="attack_type" name="attack_type" rows="5" cols="30"></input>
+            <br>
+            
+            <label for="ap_cost">AP Cost</label>
+            <br>
+            <input type="number" id="ap_cost" name="ap_cost" />
+            <br>
+            
+            <label for="essence_cost">Essence Cost</label>
+            <br>
+            <input type="number" id="essence_cost" name="essence_cost" />
+            <br>
+            
+            <label for="accuracy">Accuracy</label>
+            <br>
+            <input type="number" id="accuracy" name="accuracy" />
+            <br>
+            
+            <label for="dammage_ratio">Dammage Ratio</label>
+            <br>
+            <input type="number" id="dammage_ratio" name="dammage_ratio" />
+            <br>
+            
+            <label for="crit_chance">Crit Chance</label>
+            <br>
+            <input type="number" id="crit_chance" name="crit_chance" />
+            <br>
+            
+            <label for="targets">Targets</label>
+            <br>
+            <input type="number" id="targets" name="targets" />
+            <br>
+            
+            <label for="hits">Hits</label>
+            <br>
+            <input type="number" id="hits" name="hits" />
+            <br>
+            
+            <label for="aggro_per_hit">Aggro per hit</label>
+            <br>
+            <input type="number" id="aggro_per_hit" name="aggro_per_hit" />
+            <br>
+
+            <br>
+            <input type="submit" value="Submit">
+            
+        </form>
+    </body>
+</html>

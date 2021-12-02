@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Immortal Blade</title>
+    <link rel="stylesheet" text="text/css" href="../css/index.css" />
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    
+</head>
+
+<body>
+
+    <!-- +++++++++++++++++++ HOME PAGE ++++++++++++++++++++ -->
+    <div data-role="page" id="Home" data-theme="a">
+        <!-- +++++ HEADER +++++ -->
+        <div data-role="header">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href=/select>Start Game</a></li>
+                    <li><a href=/tutorial>Tutorial</a></li>
+                </ul>
+            </div>
+            <h1>Starblade++</h1>
+            <img src="../images/Starblade_logo.webp" alt="some rpg game photo"
+                class="logo">
+        </div>
+
+        <!-- +++++ CONTENT +++++ -->
+        <div data-role="content" data-theme="b">
+            <h1 style="text-align: center;">Starblade</h1>
+
+            <!-- Slideshow container -->
+            <div class="slideshow-container">
+                <!-- Full-width images with number and caption text -->
+                <div class="mySlides fade">
+                    <div class="numbertext">1 / 4</div>
+                    <img src="../images/RPG Project Picture 1.PNG" style="width:100%">
+                    <div class="text">Caption One</div>
+                </div>
+
+                <div class="mySlides fade">
+                    <div class="numbertext">2 / 4</div>
+                    <img src="../images/game concept 1.png" style="width:100%">
+                    <div class="text">Caption Two</div>
+                </div>
+
+                <div class="mySlides fade">
+                    <div class="numbertext">3 / 4</div>
+                    <img src="../images/Jason 8.png" style="width:100%">
+                    <div class="text">Caption Three</div>
+                </div>
+
+                <div class="mySlides fade">
+                    <div class="numbertext">4 / 4</div>
+                    <img src="../images/Monica 4.png" style="width:100%">
+                    <div class="text">Caption Four</div>
+                </div>
+                <!-- Next and previous buttons -->
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+            </div>
+            <br>
+            <!-- The dots/circles -->
+            <div style="text-align:center">
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+            </div>
+
+
+
+
+            <!-- <img src="../../Documentation/RPG-Project-Drawings/RPG Project Picture 1.PNG" alt="slider photos"
+                class="center"> -->
+            <h4>Game Play Description</h4>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure excepturi voluptates facilis delectus aut
+                architecto! Rem consectetur delectus cum ratione, culpa ad commodi, quia suscipit aperiam veritatis,
+                provident laborum eaque.
+                Officia reiciendis delectus nihil quaerat provident modi aliquam mollitia quas? Consectetur assumenda
+                voluptas distinctio. Officiis odio fuga eum repellendus, mollitia ratione provident quas eaque,
+                dignissimos eius repellat, voluptatum expedita dolore!</p>
+        </div>
+
+        <!-- +++++ FOOTER +++++ -->
+        <div data-role="footer">
+            <h6>&copy; 2021 by Team Spirit</h6>
+        </div>
+    </div>
+    <script src="../javascript/index.js"></script>
+</body>
+
+</html>
