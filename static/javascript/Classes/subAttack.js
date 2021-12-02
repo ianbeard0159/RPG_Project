@@ -1,9 +1,10 @@
 import {Action} from './supAction.js'
 
 export class Attack extends Action {
-    constructor(AP_cost, ESS_cost, accuracy, damage_ratio, crit_chance, targets, hits, aggro_per_hit) {
+    constructor(attack_type, AP_cost, ESS_cost, accuracy, damage_ratio, crit_chance, targets, hits, aggro_per_hit) {
         super(AP_cost, ESS_cost, targets);
 
+        this.attack_type = attack_type;
         this.accuracy = accuracy;
         this.crit_chance = crit_chance;
         this.damage_ratio = damage_ratio;

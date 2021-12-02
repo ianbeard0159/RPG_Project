@@ -44,6 +44,7 @@ export class supUnit {
 	populateAttacks(inAttacks) {
 		for (let att in inAttacks) {
 			this.attackList[att] = new Attack(
+				inAttacks[att].attack_type,
 				inAttacks[att].AP_cost,
 				inAttacks[att].ESS_cost,
 				inAttacks[att].accuracy,
@@ -98,7 +99,7 @@ export class supUnit {
 			let aimStat;
 			let dmgMods = [];
 			// Use Strength and Dexterity for physical attacks
-			if (this.attackList[att].type == "physical") {
+			if (this.attackList[att].attack_type == "physical") {
 				attackStat = this.str;
 				aimStat = this.dex;
 				// Apply any relevant modifiers
@@ -134,6 +135,7 @@ export class supUnit {
 				}
 			}
 			let targetData = {};
+			console.log(this.attackList[att]);
 			for (let hit = 0; hit < this.attackList[att].hits; hit++) {
 				let damageData = this.attackList[att].dealDamage(attackStat, aimStat, dmgMods, targets[target], this.tension, this.lvl);
 				let returnStr = "Hit";
@@ -166,7 +168,6 @@ export class supUnit {
 	// Change the unit's tension, min 0.5, max 1.5
 	changeTension(change) {
 		let newTension = Math.round((this.tension + change) * 100) /100;
-		console.log(this.tension + " - " + newTension);
 		// Enforce min/max
 		if (newTension > 1.5) {
 			newTension = 1.5;
@@ -245,7 +246,8 @@ export class supUnit {
 		const takeData = {
 			damage: totalDamage,
 			tension: tensionChange,
-			result: result
+			result: result,
+			change: change
 		}
 
 		return takeData;

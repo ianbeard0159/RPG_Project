@@ -15,6 +15,11 @@ function generateHTML(inData) {
         <br>
         <textarea id="description" name="description" rows="5" cols="30">${inData[0]['description']}</textarea>
         <br>
+        
+        <label for="attack_type">Attack type</label>
+        <br>
+        <input type="text" id="attack_type" name="attack_type" rows="5" cols="30">${inData[0]['attack_type']}</input>
+        <br>
             
         <label for="ap_cost">AP Cost</label>
         <br>

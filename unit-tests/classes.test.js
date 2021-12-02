@@ -18,6 +18,7 @@ const inCharacters = {
         AP_ratio: 4,
         attackList: {
             "Test Attack": {
+                attack_type: "physical",
                 AP_cost: 2,
                 ESS_cost: 7,
                 accuracy: 70,
@@ -28,6 +29,7 @@ const inCharacters = {
                 aggro_per_hit: 7
             },
             "Test Attack 2": {
+                attack_type: "electric",
                 AP_cost: 4,
                 ESS_cost: 10,
                 accuracy: 70,
@@ -64,6 +66,7 @@ const inCharacters = {
         AP_ratio: 4,
         attackList: {
             "Test Attack": {
+                attack_type: "physical",
                 AP_cost: 2,
                 ESS_cost: 7,
                 accuracy: 70,
@@ -74,6 +77,7 @@ const inCharacters = {
                 aggro_per_hit: 7
             },
             "Test Attack 2": {
+                attack_type: "fire",
                 AP_cost: 4,
                 ESS_cost: 10,
                 accuracy: 70,
@@ -112,6 +116,7 @@ const inEnemys = {
         AP_ratio: 4,
         attackList: {
             "Test Attack": {
+                attack_type: "physical",
                 AP_cost: 2,
                 ESS_cost: 7,
                 accuracy: 50,
@@ -215,6 +220,13 @@ for (let char in testGame.characterList) {
                         expect(initialTension).not.toEqual(newTension);
                     });
                     // The aggro that the target has accumulated towards the target should be updated
+                    /*
+                    test(`-- Aggro for ${char_name} changed by ${takeData.change}`, function () {
+                        let index = testGame.enemyList[en].aggroTab.filter(function (aggroEntry) {
+                            return
+                        });
+                    });
+                    */
                 }
             }
         });
