@@ -234,7 +234,8 @@ class supUnit {
 		const takeData = {
 			damage: totalDamage,
 			tension: tensionChange,
-			result: result
+			result: result,
+			change: change
 		}
 
 		return takeData;

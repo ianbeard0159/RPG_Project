@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1638399885806" clover="3.2.0">
-  <project timestamp="1638399885806" name="All files">
-    <metrics statements="249" coveredstatements="169" conditionals="104" coveredconditionals="48" methods="31" coveredmethods="20" elements="384" coveredelements="237" complexity="0" loc="249" ncloc="249" packages="1" files="7" classes="7"/>
+<coverage generated="1638405226006" clover="3.2.0">
+  <project timestamp="1638405226006" name="All files">
+    <metrics statements="249" coveredstatements="171" conditionals="104" coveredconditionals="49" methods="31" coveredmethods="20" elements="384" coveredelements="240" complexity="0" loc="249" ncloc="249" packages="1" files="7" classes="7"/>
     <file name="game.js" path="C:\Users\ianbe\Documents\git-repos\RPG_Project\static\javascript\Classes\game.js">
       <metrics statements="17" coveredstatements="16" conditionals="8" coveredconditionals="4" methods="3" coveredmethods="3"/>
       <line num="1" count="1" type="stmt"/>
@@ -23,7 +23,7 @@
       <line num="62" count="1" type="stmt"/>
     </file>
     <file name="subAttack.js" path="C:\Users\ianbe\Documents\git-repos\RPG_Project\static\javascript\Classes\subAttack.js">
-      <metrics statements="28" coveredstatements="24" conditionals="12" coveredconditionals="9" methods="4" coveredmethods="4"/>
+      <metrics statements="28" coveredstatements="25" conditionals="12" coveredconditionals="9" methods="4" coveredmethods="4"/>
       <line num="1" count="1" type="stmt"/>
       <line num="5" count="7" type="stmt"/>
       <line num="7" count="7" type="stmt"/>
@@ -37,14 +37,14 @@
       <line num="19" count="6" type="stmt"/>
       <line num="20" count="6" type="stmt"/>
       <line num="24" count="6" type="cond" truecount="4" falsecount="0"/>
-      <line num="25" count="3" type="stmt"/>
-      <line num="27" count="3" type="cond" truecount="3" falsecount="1"/>
-      <line num="28" count="3" type="stmt"/>
+      <line num="25" count="2" type="stmt"/>
+      <line num="27" count="4" type="cond" truecount="2" falsecount="2"/>
+      <line num="28" count="4" type="stmt"/>
       <line num="31" count="0" type="stmt"/>
       <line num="36" count="6" type="stmt"/>
-      <line num="37" count="6" type="cond" truecount="1" falsecount="1"/>
-      <line num="38" count="0" type="stmt"/>
-      <line num="41" count="6" type="stmt"/>
+      <line num="37" count="6" type="cond" truecount="2" falsecount="0"/>
+      <line num="38" count="2" type="stmt"/>
+      <line num="41" count="4" type="stmt"/>
       <line num="46" count="6" type="stmt"/>
       <line num="47" count="6" type="stmt"/>
       <line num="51" count="6" type="stmt"/>
@@ -130,7 +130,7 @@
       <line num="18" count="1" type="stmt"/>
     </file>
     <file name="supUnit.js" path="C:\Users\ianbe\Documents\git-repos\RPG_Project\static\javascript\Classes\supUnit.js">
-      <metrics statements="140" coveredstatements="91" conditionals="64" coveredconditionals="28" methods="10" coveredmethods="7"/>
+      <metrics statements="140" coveredstatements="92" conditionals="64" coveredconditionals="29" methods="10" coveredmethods="7"/>
       <line num="1" count="1" type="stmt"/>
       <line num="2" count="1" type="stmt"/>
       <line num="9" count="3" type="stmt"/>
@@ -194,8 +194,8 @@
       <line num="128" count="6" type="stmt"/>
       <line num="130" count="6" type="cond" truecount="1" falsecount="1"/>
       <line num="131" count="0" type="stmt"/>
-      <line num="133" count="6" type="cond" truecount="1" falsecount="1"/>
-      <line num="134" count="0" type="stmt"/>
+      <line num="133" count="6" type="cond" truecount="2" falsecount="0"/>
+      <line num="134" count="2" type="stmt"/>
       <line num="136" count="6" type="stmt"/>
       <line num="141" count="2" type="cond" truecount="1" falsecount="1"/>
       <line num="142" count="2" type="stmt"/>
@@ -252,25 +252,25 @@
       <line num="232" count="11" type="stmt"/>
       <line num="233" count="11" type="stmt"/>
       <line num="234" count="11" type="stmt"/>
-      <line num="240" count="11" type="stmt"/>
-      <line num="245" count="1" type="stmt"/>
-      <line num="250" count="11" type="cond" truecount="2" falsecount="0"/>
-      <line num="251" count="2" type="stmt"/>
+      <line num="241" count="11" type="stmt"/>
+      <line num="246" count="1" type="stmt"/>
+      <line num="251" count="11" type="cond" truecount="2" falsecount="0"/>
       <line num="252" count="2" type="stmt"/>
-      <line num="254" count="11" type="cond" truecount="3" falsecount="1"/>
-      <line num="255" count="0" type="stmt"/>
-      <line num="260" count="0" type="stmt"/>
-      <line num="262" count="0" type="stmt"/>
-      <line num="267" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="268" count="0" type="stmt"/>
-      <line num="276" count="0" type="stmt"/>
+      <line num="253" count="2" type="stmt"/>
+      <line num="255" count="11" type="cond" truecount="3" falsecount="1"/>
+      <line num="256" count="0" type="stmt"/>
+      <line num="261" count="0" type="stmt"/>
+      <line num="263" count="0" type="stmt"/>
+      <line num="268" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="269" count="0" type="stmt"/>
       <line num="277" count="0" type="stmt"/>
-      <line num="278" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="279" count="0" type="stmt"/>
-      <line num="283" count="0" type="cond" truecount="0" falsecount="2"/>
-      <line num="284" count="0" type="stmt"/>
-      <line num="286" count="0" type="stmt"/>
-      <line num="293" count="1" type="stmt"/>
+      <line num="278" count="0" type="stmt"/>
+      <line num="279" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="280" count="0" type="stmt"/>
+      <line num="284" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="285" count="0" type="stmt"/>
+      <line num="287" count="0" type="stmt"/>
+      <line num="294" count="1" type="stmt"/>
     </file>
   </project>
 </coverage>
