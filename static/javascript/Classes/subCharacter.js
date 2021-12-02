@@ -4,9 +4,9 @@ import {supUnit} from './supUnit.js'
 //Player Characters <Extends Unit>
 export class Character extends supUnit {
 
-    constructor(str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio){
+    constructor(char_name, char_desc,str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio){
 
-        super(str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio);
+        super(char_name, char_desc, str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio);
         //Variables
         /*
         Evade Pity

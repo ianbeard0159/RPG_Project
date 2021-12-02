@@ -12,6 +12,8 @@ export class GameClass {
     populateCharacters(inCharacters) {
         for (let char in inCharacters) {
             this.characterList[char] = new Character(
+                inCharacters[char].char_name,
+                inCharacters[char].char_desc,
                 inCharacters[char].str,
                 inCharacters[char].will,
                 inCharacters[char].dex,

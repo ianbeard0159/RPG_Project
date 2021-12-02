@@ -4,8 +4,10 @@ import {Support} from './subSupport.js'
 //Super Unit class that will give heritage to Character and Enemy
 export class supUnit {
 
-    constructor(str, will, dex, foc, def, agi, lvl, ratio_HP, ratio_ESS, ratio_AP){
+    constructor(char_name, char_desc, str, will, dex, foc, def, agi, lvl, ratio_HP, ratio_ESS, ratio_AP){
 		// Stats
+		this.char_name = char_name;
+		this.char_desc = char_desc;
         this.str = str;
 		this.will = will;
 		this.dex = dex;
