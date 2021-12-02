@@ -11,9 +11,9 @@ function generateHTML(inData) {
 }
 
 window.onload = function () {
-    console.log(`${url}/test/table/characters`);
+    console.log(`${url}/getNames/:unitTable`);
     const xhttp = new XMLHttpRequest();
-    xhttp.open('GET', `${url}/test/table/characters`);
+    xhttp.open('GET', `${url}/getNames/:unitTable`);
     xhttp.onload = function () {
         if (xhttp.readyState === 4) {
             if (xhttp.status === 200) {

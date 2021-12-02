@@ -32,7 +32,7 @@ function generateHTML(inData, enemyData) {
                          enemyData[entry]['defense'], enemyData[entry]['agility'],
                          enemyData[entry]['char_level'], enemyData[entry]['health_ratio'],
                          enemyData[entry]['ap_ratio']);
-        characterArray.push(char)
+        enemyArray.push(char)
     }
 
     console.log(enemyArray);
@@ -43,6 +43,11 @@ function generateHTML(inData, enemyData) {
         output += `<table id=${characterArray[char].char_name} style="margin: 10px; padding: 5px; background-color: lightgray;">\
             <th>${characterArray[char].char_name} </th>\
             <tr><td>${characterArray[char].char_desc}</tr></td>`;
+    }
+    for (let char in enemyArray) {   
+        output += `<table id=${enemyArray[char].char_name} style="margin: 10px; padding: 5px; background-color: lightgray;">\
+            <th>${enemyArray[char].char_name} </th>\
+            <tr><td>${enemyArray[char].char_desc}</tr></td>`;
     }
     return output;
 }
