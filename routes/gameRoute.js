@@ -7,7 +7,7 @@ router.get('/' , function (req, res) {
 });
 
 router.get('/game' , function (req, res) {
-    res.sendFile(path.join(`${__dirname}/../static/html/game.html`));
+    res.sendFile(path.join(`${__dirname}/../static/html/gamePage.html`));
 });
 
 router.get('/select' , function (req, res) {
@@ -18,6 +18,9 @@ router.get('/tutorial' , function (req, res) {
     res.sendFile(path.join(`${__dirname}/../static/html/tutorial.html`));
 });
 
+// Get all names and descriptions from characters/enemys
 
+// Get all data from input character/enemy
+//  |--> Get all attacks/supports from input character/enemy
 
 module.exports = router;

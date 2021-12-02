@@ -1,7 +1,8 @@
-const supUnit = require('./supUnit');
+//const supUnit = require('./supUnit');
+import {supUnit} from './supUnit.js'
 
 //Player Characters <Extends Unit>
-class Character extends supUnit {
+export class Character extends supUnit {
 
     constructor(str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio){
 
@@ -37,5 +38,3 @@ class Character extends supUnit {
         });
     }
 }
-
-module.exports = Character;

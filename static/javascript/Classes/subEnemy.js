@@ -1,6 +1,6 @@
-const supUnit = require('./supUnit');
+import {supUnit} from './supUnit.js'
 
-class Enemy extends supUnit {
+export class Enemy extends supUnit {
     //Vaiables
     /*
     Aggro Table
@@ -117,5 +117,3 @@ class Enemy extends supUnit {
         this.performSupport(action, targets);
     }
 }
-
-module.exports = Enemy;

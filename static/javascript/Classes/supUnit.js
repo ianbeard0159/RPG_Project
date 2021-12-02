@@ -1,8 +1,8 @@
-const Attack = require('./subAttack');
-const Support = require('./subSupport');
+import {Attack} from './subAttack.js'
+import {Support} from './subSupport.js'
 
 //Super Unit class that will give heritage to Character and Enemy
-class supUnit {
+export class supUnit {
 
     constructor(str, will, dex, foc, def, agi, lvl, ratio_HP, ratio_ESS, ratio_AP){
 		// Stats
@@ -42,6 +42,7 @@ class supUnit {
 	populateAttacks(inAttacks) {
 		for (let att in inAttacks) {
 			this.attackList[att] = new Attack(
+				inAttacks[att].attack_type,
 				inAttacks[att].AP_cost,
 				inAttacks[att].ESS_cost,
 				inAttacks[att].accuracy,
@@ -55,7 +56,16 @@ class supUnit {
 	}
 	populateSupports(inSupports) {
 		for (let sup in inSupports) {
-			this.supportList.push(new Support(sup));
+			this.supportList[sup] = new Support(
+				inSupports[sup].AP_cost,
+				inSupports[sup].ESS_cost,
+				inSupports[sup].targets,
+				inSupports[sup].base_heal,
+				inSupports[sup].support_type,
+				inSupports[sup].revive,
+				inSupports[sup].modifier,
+				inSupports[sup].aggro,
+			);
 
 			// If the support has modifiers attached to it, assign 
 			//    those modifiers here
@@ -87,7 +97,7 @@ class supUnit {
 			let aimStat;
 			let dmgMods = [];
 			// Use Strength and Dexterity for physical attacks
-			if (this.attackList[att].type == "physical") {
+			if (this.attackList[att].attack_type == "physical") {
 				attackStat = this.str;
 				aimStat = this.dex;
 				// Apply any relevant modifiers
@@ -123,6 +133,7 @@ class supUnit {
 				}
 			}
 			let targetData = {};
+			console.log(this.attackList[att]);
 			for (let hit = 0; hit < this.attackList[att].hits; hit++) {
 				let damageData = this.attackList[att].dealDamage(attackStat, aimStat, dmgMods, targets[target], this.tension, this.lvl);
 				let returnStr = "Hit";
@@ -155,7 +166,6 @@ class supUnit {
 	// Change the unit's tension, min 0.5, max 1.5
 	changeTension(change) {
 		let newTension = Math.round((this.tension + change) * 100) /100;
-		console.log(this.tension + " - " + newTension);
 		// Enforce min/max
 		if (newTension > 1.5) {
 			newTension = 1.5;
@@ -288,7 +298,3 @@ class supUnit {
 	}
 
 }
-
-
-
-module.exports = supUnit;

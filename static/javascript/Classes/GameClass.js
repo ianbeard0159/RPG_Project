@@ -1,7 +1,9 @@
-const Character = require('./subCharacter');
-const Enemy = require('./subEnemy');
+//const Character = require('./subCharacter');
+import {Character} from './subCharacter.js'
+//const Enemy = require('./subEnemy');
+import {Enemy} from './subEnemy.js'
 
-export class Game {
+export class GameClass {
     constructor() {
         this.characterList = {};
         this.enemyList = {};
@@ -27,7 +29,7 @@ export class Game {
                 this.characterList[char].populateAttacks(inCharacters[char].attackList);
             }
             if (inCharacters[char].supportList) {
-                this.characterList[char].populateAttacks(inCharacters[char].supportList);
+                this.characterList[char].populateSupports(inCharacters[char].supportList);
             }
         }
     }
@@ -58,5 +60,3 @@ export class Game {
     }
     
 }
-
-module.exports = Game;
