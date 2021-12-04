@@ -12,6 +12,7 @@ export class GameClass {
     populateCharacters(inCharacters) {
         for (let char in inCharacters) {
             this.characterList[char] = new Character(
+                inCharacters[char].description,
                 inCharacters[char].str,
                 inCharacters[char].will,
                 inCharacters[char].dex,
@@ -37,6 +38,7 @@ export class GameClass {
     populateEnemys(inEnemys) {
         for (let en in inEnemys) {
             this.enemyList[en] = new Enemy(
+                inEnemys[en].description,
                 inEnemys[en].str,
                 inEnemys[en].will,
                 inEnemys[en].dex,

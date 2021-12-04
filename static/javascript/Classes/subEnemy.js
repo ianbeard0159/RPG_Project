@@ -5,8 +5,8 @@ export class Enemy extends supUnit {
     /*
     Aggro Table
     */
-    constructor(str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio) {
-        super(str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio);
+    constructor(description, str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio) {
+        super(description, str, will, dex, foc, def, agi, lvl, hpRatio, essRatio, apRatio);
         this.aggroTab = [];
     }
 

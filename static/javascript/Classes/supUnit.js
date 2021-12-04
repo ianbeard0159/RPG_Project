@@ -4,7 +4,10 @@ import {Support} from './subSupport.js'
 //Super Unit class that will give heritage to Character and Enemy
 export class supUnit {
 
-    constructor(str, will, dex, foc, def, agi, lvl, ratio_HP, ratio_ESS, ratio_AP){
+    constructor(description, str, will, dex, foc, def, agi, lvl, ratio_HP, ratio_ESS, ratio_AP){
+		
+		this.description = description;
+		
 		// Stats
         this.str = str;
 		this.will = will;
@@ -42,6 +45,7 @@ export class supUnit {
 	populateAttacks(inAttacks) {
 		for (let att in inAttacks) {
 			this.attackList[att] = new Attack(
+				inAttacks[att].description,
 				inAttacks[att].attack_type,
 				inAttacks[att].AP_cost,
 				inAttacks[att].ESS_cost,
@@ -57,6 +61,7 @@ export class supUnit {
 	populateSupports(inSupports) {
 		for (let sup in inSupports) {
 			this.supportList[sup] = new Support(
+				inSupports[sup].description,
 				inSupports[sup].AP_cost,
 				inSupports[sup].ESS_cost,
 				inSupports[sup].targets,
