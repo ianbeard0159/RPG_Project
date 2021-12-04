@@ -13,16 +13,16 @@ export class GameClass {
         for (let char in inCharacters) {
             this.characterList[char] = new Character(
                 inCharacters[char].description,
-                inCharacters[char].str,
-                inCharacters[char].will,
-                inCharacters[char].dex,
-                inCharacters[char].foc,
-                inCharacters[char].def,
-                inCharacters[char].agi,
-                inCharacters[char].lvl,
-                inCharacters[char].HP_ratio,
-                inCharacters[char].ESS_ratio,
-                inCharacters[char].AP_ratio
+                inCharacters[char].strength,
+                inCharacters[char].willpower,
+                inCharacters[char].dexterity,
+                inCharacters[char].focus,
+                inCharacters[char].defense,
+                inCharacters[char].agility,
+                inCharacters[char].char_level,
+                inCharacters[char].health_ratio,
+                inCharacters[char].essence_ratio,
+                inCharacters[char].ap_ratio
             );
             // The character input should include that character's 
             //     attacks and supports
@@ -39,16 +39,16 @@ export class GameClass {
         for (let en in inEnemys) {
             this.enemyList[en] = new Enemy(
                 inEnemys[en].description,
-                inEnemys[en].str,
-                inEnemys[en].will,
-                inEnemys[en].dex,
-                inEnemys[en].foc,
-                inEnemys[en].def,
-                inEnemys[en].agi,
-                inEnemys[en].lvl,
-                inEnemys[en].HP_ratio,
-                inEnemys[en].ESS_ratio,
-                inEnemys[en].AP_ratio
+                inEnemys[en].strength,
+                inEnemys[en].willpower,
+                inEnemys[en].dexterity,
+                inEnemys[en].focus,
+                inEnemys[en].defense,
+                inEnemys[en].agility,
+                inEnemys[en].enemy_level,
+                inEnemys[en].health_ratio,
+                inEnemys[en].essence_ratio,
+                inEnemys[en].ap_ratio
             );
             // The Enemy input should include that Enemy's 
             //     attacks and supports

@@ -1,28 +1,11 @@
 const url = "http://localhost:3000";
 
 import { GameClass } from './Classes/GameClass.js';
-import { Character } from './Classes/subCharacter.js';
-import { Enemy } from './Classes/subEnemy.js';
-let characterList = {};
-let enemyList = {};
 let game = new GameClass();
 
 function generateHTML(inData, enemyData) {
     let output = ''; 
     for (let entry in inData) {
-        characterList[inData[entry].char_name] = new Character(
-            inData[entry].description,
-            inData[entry].strength,
-            inData[entry].willpower,
-            inData[entry].dexterity,
-            inData[entry].focus, 
-            inData[entry].defense,
-            inData[entry].agility,
-            inData[entry].char_level,
-            inData[entry].health_ratio,
-            inData[entry].essence_ratio,
-            inData[entry].ap_ratio
-            );
 
         // Make a request for the attacks used for that unit
         const xhttpAttacks = new XMLHttpRequest();
@@ -32,43 +15,39 @@ function generateHTML(inData, enemyData) {
             // Parse the data from the response
             const attacks = JSON.parse(xhttpAttacks.responseText);
             // If there are any entries in the response
+            inData[entry].attackList = {};
             for (let attack in attacks){
                 // Make rows in the table for the attacks
-                characterList[inData[entry].char_name].attackList[attacks[attack].attack_name] = attacks[attack];
+                inData[entry].attackList[attacks[attack].attack_name] = attacks[attack];
             }
         }
         xhttpAttacks.send();
 
-                // Make a request for the supports used for that unit
-                const xhttpSupports = new XMLHttpRequest();
-                // Make sure the response is syncronous
-                xhttpSupports.open('GET', `${url}/getActions/characters/supports/${inData[entry]['id_characters']}`, false);
-                xhttpSupports.onload = function () {
-                    // Parse the data from the response
-                    const supports = JSON.parse(xhttpSupports.responseText);
-                    // If there are any entries in the response
-                    for (let support in supports){
-                        // Make rows in the table for the supports
-                        characterList[inData[entry].char_name].supportList[supports[support].support_name] = supports[support];
-                    }
-                }
-                xhttpSupports.send();
+        // Make a request for the supports used for that unit
+        const xhttpSupports = new XMLHttpRequest();
+        // Make sure the response is syncronous
+        xhttpSupports.open('GET', `${url}/getActions/characters/supports/${inData[entry]['id_characters']}`, false);
+        xhttpSupports.onload = function () {
+            // Parse the data from the response
+            const supports = JSON.parse(xhttpSupports.responseText);
+            // If there are any entries in the response
+            inData[entry].supportList = {};
+            for (let support in supports){
+                // Make rows in the table for the supports
+                inData[entry].supportList[supports[support].support_name] = supports[support];
+            }
+        }
+        xhttpSupports.send();
+    }
+    let characterList = {};
+    for (let entry in inData) {
+        console.log(inData[entry]);
+        characterList[inData[entry].char_name] = inData[entry];
     }
     game.populateCharacters(characterList);
+    console.log(game.characterList);
 
     for (let entry in enemyData) {
-        enemyList[enemyData[entry].enemy_name] = new Enemy(
-        enemyData[entry].description,
-        enemyData[entry].strength,
-        enemyData[entry].willpower,
-        enemyData[entry].dexterity,
-        enemyData[entry].focus, 
-        enemyData[entry].defense,
-        enemyData[entry].agility,
-        enemyData[entry].char_level,
-        enemyData[entry].health_ratio,
-        enemyData[entry].ap_ratio
-        );
 
         // Make a second request for the attacks used for that unit
         const xhttpAttacks = new XMLHttpRequest();
@@ -80,7 +59,7 @@ function generateHTML(inData, enemyData) {
             // If there are any entries in the response
             for (let attack in attacks){
                 // Make rows in the table for the attacks
-                enemyList[enemyData[entry].enemy_name].attackList[attacks[attack].attack_name] = attacks[attack];
+                enemyData.attackList[attacks[attack].attack_name] = attacks[attack];
             }
         }
         xhttpAttacks.send();
@@ -95,12 +74,16 @@ function generateHTML(inData, enemyData) {
                     // If there are any entries in the response
                     for (let support in supports){
                         // Make rows in the table for the supports
-                        enemyList[enemyData[entry].enemy_name].supportList[supports[support].support_name] = supports[support];
+                        enemyData.supportList[supports[support].support_name] = supports[support];
                     }
                 }
                 xhttpSupports.send();
     }
 
+    let enemyList = {};
+    for (let entry in enemyData) {
+        enemyList[enemyData[entry].enemy_name] = enemyData[entry];
+    }
     game.populateEnemys(enemyList);
     
     for (let char in game.characterList) {  
@@ -108,7 +91,7 @@ function generateHTML(inData, enemyData) {
             <th>${char} </th>`;
         // Display all character fields
         for (let field in game.characterList[char]) {
-            if (field != 'id_characters') {
+            if (field != 'id_characters' && field != 'attackList' && field != 'supportList') {
                 output += `<tr>\
                 <td>${field}</td>\
                 <td>${game.characterList[char][field]}</td>\
