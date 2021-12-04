@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">67.62% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>92/138</span>
+                <span class='fraction'>94/139</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.87% </span>
+                <span class="strong">48.43% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>30/64</span>
+                <span class='fraction'>31/64</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.42% </span>
+                <span class="strong">67.39% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>91/137</span>
+                <span class='fraction'>93/138</span>
             </div>
         
             
@@ -356,12 +356,20 @@
 <a name='L297'></a><a href='#L297'>297</a>
 <a name='L298'></a><a href='#L298'>298</a>
 <a name='L299'></a><a href='#L299'>299</a>
-<a name='L300'></a><a href='#L300'>300</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
@@ -413,8 +421,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -500,7 +510,7 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -617,8 +627,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -661,7 +671,10 @@ import {Support} from './subSupport.js'
 //Super Unit class that will give heritage to Character and Enemy
 export class supUnit {
 &nbsp;
-    constructor(str, will, dex, foc, def, agi, lvl, ratio_HP, ratio_ESS, ratio_AP){
+    constructor(description, str, will, dex, foc, def, agi, lvl, ratio_HP, ratio_ESS, ratio_AP){
+		
+		this.description = description;
+		
 		// Stats
         this.str = str;
 		this.will = will;
@@ -699,6 +712,7 @@ export class supUnit {
 	populateAttacks(inAttacks) {
 		for (let att in inAttacks) {
 			this.attackList[att] = new Attack(
+				inAttacks[att].description,
 				inAttacks[att].attack_type,
 				inAttacks[att].AP_cost,
 				inAttacks[att].ESS_cost,
@@ -714,6 +728,7 @@ export class supUnit {
 	populateSupports(inSupports) {
 		for (let sup in inSupports) {
 			this.supportList[sup] = new Support(
+				inSupports[sup].description,
 				inSupports[sup].AP_cost,
 				inSupports[sup].ESS_cost,
 				inSupports[sup].targets,
@@ -798,8 +813,8 @@ export class supUnit {
 				if (damageData.damage == 0) {
 					returnStr = "Miss";
 				}
-				else <span class="missing-if-branch" title="if path not taken" >I</span>if (damageData.crit == 2) {
-<span class="cstat-no" title="statement not covered" >					returnStr = "Crit";</span>
+				else if (damageData.crit == 2) {
+					returnStr = "Crit";
 				}
 				targetData[hit] = {
 						damage: damageData.damage,
@@ -961,7 +976,7 @@ export class supUnit {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Dec 01 2021 21:14:29 GMT-0800 (Pacific Standard Time)
+                at Fri Dec 03 2021 18:13:52 GMT-0800 (Pacific Standard Time)
             </div>
         </div>
         <script src="prettify.js"></script>

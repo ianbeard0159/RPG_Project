@@ -6,6 +6,7 @@ test('Is this thing on?', () => {
 // Test Character Input
 const inCharacters = {
     Jason: {
+        description: "description",
         str: 12,
         will: 14,
         dex: 13,
@@ -18,6 +19,7 @@ const inCharacters = {
         AP_ratio: 4,
         attackList: {
             "Test Attack": {
+                description: "description",
                 attack_type: "physical",
                 AP_cost: 2,
                 ESS_cost: 7,
@@ -29,6 +31,7 @@ const inCharacters = {
                 aggro_per_hit: 7
             },
             "Test Attack 2": {
+                description: "description",
                 attack_type: "electric",
                 AP_cost: 4,
                 ESS_cost: 10,
@@ -42,6 +45,7 @@ const inCharacters = {
         },
         supportList: {
             "Test Support": {
+                description: "description",
                 AP_cost: 2,
                 ESS_cost: 7,
                 support_type: "heal",
@@ -66,6 +70,7 @@ const inCharacters = {
         AP_ratio: 4,
         attackList: {
             "Test Attack": {
+                description: "description",
                 attack_type: "physical",
                 AP_cost: 2,
                 ESS_cost: 7,
@@ -77,6 +82,7 @@ const inCharacters = {
                 aggro_per_hit: 7
             },
             "Test Attack 2": {
+                description: "description",
                 attack_type: "fire",
                 AP_cost: 4,
                 ESS_cost: 10,
@@ -90,6 +96,7 @@ const inCharacters = {
         },
         supportList: {
             "Test Support": {
+                description: "description",
                 AP_cost: 2,
                 ESS_cost: 7,
                 support_type: "heal",
@@ -104,6 +111,7 @@ const inCharacters = {
 }
 const inEnemys = {
     "Enemy 1": {
+        description: "description",
         str: 12,
         will: 14,
         dex: 13,
@@ -116,6 +124,7 @@ const inEnemys = {
         AP_ratio: 4,
         attackList: {
             "Test Attack": {
+                description: "description",
                 attack_type: "physical",
                 AP_cost: 2,
                 ESS_cost: 7,

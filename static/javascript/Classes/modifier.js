@@ -1,5 +1,7 @@
 export class modifier {
-    constructor( ap, essenceCost, caster, category, revive, targets, targetconditions) {
+    constructor( description, ap, essenceCost, caster, category, revive, targets, targetconditions) {
+      
+      this.description = description;
       this.AP = ap;
       this.essenceCost = essenceCost;
       this.caster = caster;
