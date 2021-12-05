@@ -10,45 +10,47 @@
     <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    <script src="../../select.js"></script>
-    
+    <script type='module' src="../javascript/select.js"></script>
 </head>
 
 <body>
     <!-- +++++++++++++++++++ SELECT GAME PAGE ++++++++++++++++++++ -->
     <div data-role="page" id="select" data-theme="a">
-     <!-- +++++ HEADER +++++ -->
-     <div data-role="header">
-        <div data-role="navbar">
-            <ul>
-                <li><a href='/'>Home</a></li>
-                <li><a href='/tutorial'>Tutorial</a></li>
-            </ul>
+        <!-- +++++ HEADER +++++ -->
+        <div data-role="header">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href='/'>Home</a></li>
+                    <li><a href='/tutorial'>Tutorial</a></li>
+                </ul>
+            </div>
+            <h1>Starblade++</h1>
+            <img src="../images/Starblade_logo.webp" alt="some rpg game photo"
+                class="logo">
         </div>
-        <h1>Starblade++</h1>
-        <img src="../images/Starblade_logo.webp" alt="some rpg game photo"
-            class="logo">
-    </div>
 
-      <!-- +++++ CONTENT +++++ -->
-      <div data-role="content" data-theme="b">
-        <h1 style="text-align: center;">Immortal Blade</h1>
-        <h1>Character List & Descriptions       </h1> <h1>Enemy List & Descriptions</h1>
+        <!-- +++++ CONTENT +++++ -->
+        <div data-role="content" data-theme="b">
+            <h1 style="text-align: center;">Immortal Blade</h1>
+            <h1>Character List & Descriptions       </h1> <h1>Enemy List & Descriptions</h1>
 
-
+            <div id='container' style="display: flex"></div>
         </div>
-        <div id='container'></div>
-    <div>
 
-        please select your characters and enemies.
+        <div>
 
-        
-    </div>
-    <button onclick=location.href='/game'> Start Game</button>
+            please select your characters and enemies.
 
-     <!-- +++++ FOOTER +++++ -->
-     <div data-role="footer">
-        <h6>&copy; 2021 by Team Spirit</h6>
+            
+        </div>
+        <button onclick=location.href='/game'> Start Game</button>
+
+        <!-- +++++ FOOTER +++++ -->
+        <div data-role="footer">
+            <h6>&copy; 2021 by Team Spirit</h6>
+        </div>
+     </div>
+
 
 </body>
 
