@@ -99,35 +99,47 @@ function generateHTML(inData, enemyData) {
             }
         }
         // Display character attacks and supports
+        output += `<th> -ATTACKS- </th>`;
         for (let attack in game.characterList[char].attackList){
-            output += `<th>${attack} </th>\
+            output += `<tr><td><strong>${attack} </strong></td></tr>\
             <tr><td>${game.characterList[char].attackList[attack].description}</tr></td>`;
         }
+        output += `<th> -SUPPORTS- </th>`;
         for (let support in game.characterList[char].supportList){
-            output += `<th>${support} </th>\
+            output += `<tr><td><strong>${support} </strong></td></tr>\
             <tr><td>${game.characterList[char].supportList[support].description}</tr></td>`;
         }
         output += '</table>';
     }
 
-    // Display enemy information
     for (let enemy in game.enemyList) {   
         output += `<table id=${enemy} style="margin: 10px; padding: 5px; background-color: lightgray;">\
-            <th>${enemy} </th>\
-            <tr><td>${game.enemyList[enemy].description}</tr></td>`;
+            <th>${enemy} </th>`;
+        // Display all enemy fields
+        for (let field in game.enemyList[enemy]) {
+            if (field != 'id_enemys' && field != 'attackList' && field != 'supportList') {
+                output += `<tr>\
+                <td>${field}</td>\
+                <td>${game.enemyList[enemy][field]}</td>\
+                </tr>`;
+            }
+        }
+
+        // Display enemy attack and support
+        output += `<th> -ATTACKS- </th>`;
         for (let attack in game.enemyList[enemy].attackList){
-            output += `<th>${attack} </th>\
+            output += `<tr><td><strong>${attack} </strong></td></tr>\
             <tr><td>${game.enemyList[enemy].attackList[attack].description}</tr></td>`;
         }
+        output += `<th> -SUPPORTS- </th>`;
         for (let support in game.enemyList[enemy].supportList){
-            output += `<th>${support} </th>\
+            output += `<tr><td><strong>${support} </strong></td></tr>\
             <tr><td>${game.enemyList[enemy].supportList[support].description}</tr></td>`;
         }
         output += `</table>`;
     }
     return output;
 }
-
 
 window.onload = function () {
     console.log(`${url}/test/table/characters`);
