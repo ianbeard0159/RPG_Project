@@ -41,14 +41,14 @@ function generateHTML(inData, enemyData) {
     }
     let characterList = {};
     for (let entry in inData) {
-        console.log(inData[entry]);
         characterList[inData[entry].char_name] = inData[entry];
     }
     game.populateCharacters(characterList);
     console.log(game.characterList);
 
     for (let entry in enemyData) {
-
+        enemyData[entry].attackList = {};
+        enemyData[entry].supportList = {};
         // Make a second request for the attacks used for that unit
         const xhttpAttacks = new XMLHttpRequest();
         // Make sure the response is syncronous
@@ -59,7 +59,7 @@ function generateHTML(inData, enemyData) {
             // If there are any entries in the response
             for (let attack in attacks){
                 // Make rows in the table for the attacks
-                enemyData.attackList[attacks[attack].attack_name] = attacks[attack];
+                enemyData[entry].attackList[attacks[attack].attack_name] = attacks[attack];
             }
         }
         xhttpAttacks.send();
@@ -74,7 +74,7 @@ function generateHTML(inData, enemyData) {
                     // If there are any entries in the response
                     for (let support in supports){
                         // Make rows in the table for the supports
-                        enemyData.supportList[supports[support].support_name] = supports[support];
+                        enemyData[entry].supportList[supports[support].support_name] = supports[support];
                     }
                 }
                 xhttpSupports.send();
