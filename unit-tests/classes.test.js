@@ -7,16 +7,16 @@ test('Is this thing on?', () => {
 const inCharacters = {
     Jason: {
         description: "description",
-        str: 12,
-        will: 14,
-        dex: 13,
-        foc: 15,
-        def: 10,
-        agi: 50,
-        lvl: 10,
-        HP_ratio: 900,
-        ESS_ratio: 55,
-        AP_ratio: 4,
+        strength: 12,
+        willpower: 14,
+        dexterity: 13,
+        focus: 15,
+        defense: 10,
+        agility: 50,
+        char_level: 10,
+        health_ratio: 900,
+        essence_ratio: 55,
+        ap_ratio: 4,
         attackList: {
             "Test Attack": {
                 description: "description",
@@ -58,15 +58,15 @@ const inCharacters = {
         }
     },
     Monica: {
-        str: 14,
-        will: 16,
-        dex: 15,
-        foc: 17,
-        def: 12,
-        agi: 15,
-        lvl: 12,
-        HP_ratio: 900,
-        ESS_ratio: 55,
+        strength: 14,
+        willpower: 16,
+        dexterity: 15,
+        focus: 17,
+        defense: 12,
+        agility: 15,
+        char_level: 12,
+        health_ratio: 900,
+        essence_ratio: 55,
         AP_ratio: 4,
         attackList: {
             "Test Attack": {
@@ -112,16 +112,16 @@ const inCharacters = {
 const inEnemys = {
     "Enemy 1": {
         description: "description",
-        str: 12,
-        will: 14,
-        dex: 13,
-        foc: 50,
-        def: 10,
-        agi: 13,
-        lvl: 10,
-        HP_ratio: 900,
-        ESS_ratio: 55,
-        AP_ratio: 4,
+        strength: 12,
+        willpower: 14,
+        dexterity: 13,
+        focus: 50,
+        defense: 10,
+        agility: 13,
+        enemy_level: 10,
+        health_ratio: 900,
+        essence_ratio: 55,
+        ap_ratio: 4,
         attackList: {
             "Test Attack": {
                 description: "description",
