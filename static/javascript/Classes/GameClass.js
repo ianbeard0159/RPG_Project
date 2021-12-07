@@ -7,6 +7,17 @@ export class GameClass {
     constructor() {
         this.characterList = {};
         this.enemyList = {};
+        this.turnOrder = {};
+    }
+
+    populateGame() {
+        for (let char in this.characterList) {
+            this.turnOrder[char] = "character";
+        }
+        for (let enemy in this.enemyList) {
+            this.turnOrder[enemy] = "enemy";
+            this.enemyList[enemy].populateAggro(this.characterList);
+        }
     }
 
     populateCharacters(inCharacters) {

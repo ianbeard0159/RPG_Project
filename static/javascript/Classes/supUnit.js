@@ -29,7 +29,7 @@ export class supUnit {
 		this.HP_max = ratio_HP * Math.round(Math.sqrt(lvl));
 		this.HP_current = this.HP_max;
 		this.AP_max = ratio_AP * Math.round(Math.sqrt(lvl));
-		this.AP_current = this.AP_max; 
+		this.AP_current = 0; 
 		this.ESS_max = ratio_ESS * Math.round(Math.sqrt(lvl));
 		this.ESS_current = this.ESS_max;
 		this.tension = 1;
@@ -39,6 +39,9 @@ export class supUnit {
 		this.state = {
 			status: "Active"
 		}; 
+	}
+	startTurn() {
+		this.AP_current += this.AP_max;
 	}
 
 	// Take input from API request to assign actions to the character
@@ -76,6 +79,11 @@ export class supUnit {
 			//    those modifiers here
 		}
 	}
+	spenResources(ap, essence) {
+		this.AP_current -= ap;
+		this.ESS_current -= essence;
+		if (this.ESS_current < 0) this.ESS_current = 0;
+	}
 /*
 	addModifier(inMod) {
 		this.modifiers.push(new Modifier(inMod.name, inMod.stat, inMod.effect, inMod.duration));
@@ -89,12 +97,14 @@ export class supUnit {
 			return "not enough ap";
 		}
 		// Apply essence burn if the generate too much essence
-		let ESS_total = this.ESS_current + this.attackList[att].ESS_cost;
-		if (ESS_total > this.ESS_max) {
-			this.ESS_current = this.ESS_max;
-			let ESS_diff = ESS_total - this.ESS_max;
+		let ESS_total = this.ESS_current - this.attackList[att].ESS_cost;
+		if (ESS_total < 0) {
+			this.ESS_current = 0;
+			let ESS_diff = ESS_total / this.ESS_max;
+			console.log(ESS_diff);
 			this.essenceBurn(ESS_diff);
 		}
+		this.spenResources(this.attackList[att].AP_cost, this.attackList[att].ESS_cost);
 		// Attack each target
 		let returnData = {};
 		for (let target in targets) {
@@ -152,12 +162,15 @@ export class supUnit {
 				}
 				targetData[hit] = {
 						damage: damageData.damage,
-						result: returnStr
+						result: returnStr,
+						aggro: damageData.aggro
 				};
 			}
+			// Add the target's damage data to the result object
 			if(!returnData[targets[target].char_name]) {
 				returnData[targets[target].char_name] = targetData;
 			}
+			// If an entry for that character already exists, add one with a new name
 			else {
 				let index = Object.keys(returnData[targets[target].char_name]).length;
 				for (let i in targetData) {
@@ -165,6 +178,7 @@ export class supUnit {
 				}
 			}
 		}
+
 		return returnData;
 	}
 	// Change the unit's tension, min 0.5, max 1.5
@@ -178,8 +192,8 @@ export class supUnit {
 			newTension = 0.5;
 		}
 		// Set tension and return the value
-		this.tension = newTension;
-		return newTension;
+		if (this.state.status != "Incapacitated") this.tension = newTension;
+		return this.tension;
 	}
 	//Reduces damage from attack based on defense, resistances, evasion chance, and block chance. Then reduces CurrentHealth by the remaining number. 
 	takeDamage(inDamage) {
@@ -266,6 +280,7 @@ export class supUnit {
 		if(this.HP_current <= 0) {
 			this.HP_current = 0;
 			this.state.status = 'Incapacitated';
+			this.tension = 0.5;
 		}
 		if (this.HP_current > 0 && this.state == 'Incapacitated'){
 			this.state.status = 'Active';
