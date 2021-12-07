@@ -23,18 +23,7 @@ export class Character extends supUnit {
         Take Player Input to select targets from Action.
         PotentialTargets for the action being performed
     */
-    selectTargets(action, selectedTarget) {
-        let targeted;
-        action.potentialTagets.forEach(target => {
-            let accepted = false;
-            if (target == selectedTarget) {
-                accepted = true;
-                targeted = target;
-            } if (!accepted) {
-                console.log('invaild target')
-                return
-            }
-            return targeted;
-        });
+    selectAttackTargets(action, targetList) {
+        return this.performAttack(action, targetList);
     }
 }

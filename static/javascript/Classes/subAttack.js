@@ -55,7 +55,7 @@ export class Attack extends Action {
             baseDamage += Math.round(baseDamage * mod.effect);
         }
 
-        return { damage: baseDamage, crit: didCrit};
+        return { damage: baseDamage, crit: didCrit, aggro: this.aggro_per_hit};
     }
 
   }

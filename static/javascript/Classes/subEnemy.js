@@ -36,23 +36,36 @@ export class Enemy extends supUnit {
         // Skip incapacitated characters
         let lowestAggro = this.aggroTab[0].aggro;
         for (let char in this.aggroTab) {
-            if (lowestAggro < this.aggroTable[char].aggro 
-                && this.aggroTable[char].char_status != 'incapacitated') {
-                lowestAggro = this.aggroTable[char].aggro;
+            if (lowestAggro > this.aggroTab[char].aggro 
+                && this.aggroTab[char].char_status != 'incapacitated') {
+                lowestAggro = this.aggroTab[char].aggro;
             }
         }
         // Subtract the lowest aggro value from every 
         // character's aggro value in the table
         // set incapacitated characters to 0
+        console.log("Loop");
         for (let char in this.aggroTab) {
-            if (this.aggroTable[char].char_status != 'incapacitated') {
+            if (this.aggroTab[char].char_status != 'incapacitated') {
+                if (lowestAggro != 0) console.log(this.aggroTab[char].char_name + ": " + this.aggroTab[char].aggro);
                 this.aggroTab[char].aggro -= lowestAggro;
+                if (lowestAggro != 0) console.log("New: " + this.aggroTab[char].aggro);
             }
             // If a character is incapacitated, set their aggro to 0
             else {
                 this.aggroTab[char].aggro = 0;
             }
         }
+    }
+    changeAggro(char_name, value) {
+        for (let char in this.aggroTab) {
+            if (this.aggroTab[char].char_name == char_name) {
+                this.aggroTab[char].aggro += value;
+                this.updateAggro();
+                return this.aggroTab[char].aggro;
+            }
+        }
+        return -1;
     }
 
     //SelectTargets(Action)
@@ -65,7 +78,10 @@ export class Enemy extends supUnit {
         let targetList = [];
         // Make a temporary aggro table that entries can 
         //    be removed from as needed
-        let tempTable = this.aggroTab;
+        let tempTable = []
+        for (let char in this.aggroTab) {
+            tempTable.push(this.aggroTab[char]);
+        }
         // Make a table for any equal entries
 
         // Select a target from the table for each available target
