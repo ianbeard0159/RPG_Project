@@ -84,7 +84,7 @@ export class supUnit {
 	//Run This.SelectTargets(), then perform one of the unit's available actions.
 	performAttack(att, targets) {
 		// Make the player select a different action if they don't have enough AP
-		if (this.AP_current - this.attackList[att].cost_AP < 0) {
+		if (this.AP_current - this.attackList[att].AP_cost < 0) {
 			console.log('oops');
 			return "not enough ap";
 		}
@@ -138,7 +138,6 @@ export class supUnit {
 				}
 			}
 			let targetData = {};
-			console.log(this.attackList[att]);
 			for (let hit = 0; hit < this.attackList[att].hits; hit++) {
 				let damageData = this.attackList[att].dealDamage(attackStat, aimStat, dmgMods, targets[target], this.tension, this.lvl);
 				let returnStr = "Hit";
@@ -151,12 +150,15 @@ export class supUnit {
 				}
 				targetData[hit] = {
 						damage: damageData.damage,
-						result: returnStr
+						result: returnStr,
+						aggro: damageData.aggro
 				};
 			}
+			// Add the target's damage data to the result object
 			if(!returnData[targets[target].char_name]) {
 				returnData[targets[target].char_name] = targetData;
 			}
+			// If an entry for that character already exists, add one with a new name
 			else {
 				let index = Object.keys(returnData[targets[target].char_name]).length;
 				for (let i in targetData) {
