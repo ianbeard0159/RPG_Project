@@ -2,6 +2,7 @@ const url = "http://localhost:3000";
 
 import { GameClass } from './Classes/GameClass.js';
 let game = new GameClass();
+let selected = [];
 
 function generateHTML(inData, enemyData) {
     let output = ''; 
@@ -19,6 +20,7 @@ function generateHTML(inData, enemyData) {
             for (let attack in attacks){
                 // Make rows in the table for the attacks
                 inData[entry].attackList[attacks[attack].attack_name] = attacks[attack];
+                console.log(attacks[attack]);
             }
         }
         xhttpAttacks.send();
@@ -44,7 +46,6 @@ function generateHTML(inData, enemyData) {
         characterList[inData[entry].char_name] = inData[entry];
     }
     game.populateCharacters(characterList);
-    console.log(game.characterList);
 
     for (let entry in enemyData) {
         enemyData[entry].attackList = {};
@@ -109,11 +110,15 @@ function generateHTML(inData, enemyData) {
             output += `<tr><td><strong>${support} </strong></td></tr>\
             <tr><td>${game.characterList[char].supportList[support].description}</tr></td>`;
         }
+        
         output += '</table>';
     }
 
-    for (let enemy in game.enemyList) {   
-        output += `<table id=${enemy} style="margin: 10px; padding: 5px; background-color: lightgray;">\
+    // Enemy table generation
+
+    for (let enemy in game.enemyList) {
+        output += `<img src="../images/Jason8.png" class="en" id="${enemy}" style="height: 80px; width: 60px; display: block; border-color: red; border-style: none"> 
+        <table id=${enemy}tab  style="margin: 10px; padding: 5px; background-color: lightgray;">\
             <th>${enemy} </th>`;
         // Display all enemy fields
         for (let field in game.enemyList[enemy]) {
@@ -138,7 +143,47 @@ function generateHTML(inData, enemyData) {
         }
         output += `</table>`;
     }
+    console.log(game.enemyList);
     return output;
+}
+function generateListeners(){
+    // onClick listeners for the images of enemies
+    for (let enemy in game.enemyList) {
+    document.getElementById(enemy).addEventListener("click", () => giveId(enemy),false);
+    }
+
+    //listens for the basic buttons
+    document.getElementById("attackbtn").addEventListener("click", () => attack(),false);
+}
+
+function attack(){
+    
+    for (let enemy in game.enemyList) {
+        document.getElementById(enemy).style.border = "solid red";
+        }
+    if(selected != []){
+        let attackData = game.characterList["Jason"].selectAttackTargets('Basic Attack', selected);
+        for (let enemy in selected) {
+            console.log(game.enemyList["Lesser Demon"].HP_current);
+            let some = game.enemyList["Lesser Demon"].takeDamage(attackData['Lesser Demon'][0].damage);
+            console.log(game.enemyList["Lesser Demon"].HP_current);
+            console.log(some);
+        }
+        console.log(attackData);
+        selected = [];
+        for (let enemy in game.enemyList) {
+            document.getElementById(enemy).style.border = "none";
+            }
+    }
+}
+
+function giveId(enemy) {
+    console.log(`id is ${enemy}`)
+    let target = {char_name: enemy,
+                char_def: game.enemyList[enemy].def,
+                char_agi: game.enemyList[enemy].agi,
+                char_tension: game.enemyList[enemy].tension};
+    selected.push(target);
 }
 
 window.onload = function () {
@@ -157,6 +202,7 @@ window.onload = function () {
                             const enemys = JSON.parse(xhttpEnemy.responseText);
                             let html = generateHTML(characters, enemys);
                             document.getElementById("container").innerHTML += html;
+                            document.getElementById("container").addEventListener('load', generateListeners());     
                         }
                     }
                 }

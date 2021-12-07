@@ -47,10 +47,10 @@ export class supUnit {
 			this.attackList[att] = new Attack(
 				inAttacks[att].description,
 				inAttacks[att].attack_type,
-				inAttacks[att].AP_cost,
-				inAttacks[att].ESS_cost,
+				inAttacks[att].ap_cost,
+				inAttacks[att].essence_cost,
 				inAttacks[att].accuracy,
-				inAttacks[att].damage_ratio,
+				inAttacks[att].dammage_ratio,
 				inAttacks[att].crit_chance,
 				inAttacks[att].targets,
 				inAttacks[att].hits,
@@ -84,7 +84,7 @@ export class supUnit {
 	//Run This.SelectTargets(), then perform one of the unit's available actions.
 	performAttack(att, targets) {
 		// Make the player select a different action if they don't have enough AP
-		if (this.AP_current - this.attackList[att].cost_AP < 0) {
+		if (this.AP_current - this.attackList[att].AP_cost < 0) {
 			console.log('oops');
 			return "not enough ap";
 		}
@@ -138,10 +138,11 @@ export class supUnit {
 				}
 			}
 			let targetData = {};
-			console.log(this.attackList[att]);
 			for (let hit = 0; hit < this.attackList[att].hits; hit++) {
 				let damageData = this.attackList[att].dealDamage(attackStat, aimStat, dmgMods, targets[target], this.tension, this.lvl);
 				let returnStr = "Hit";
+				console.log(this.attackList[att])
+				console.log(damageData.damage);
 
 				if (damageData.damage == 0) {
 					returnStr = "Miss";
@@ -165,8 +166,6 @@ export class supUnit {
 			}
 		}
 		return returnData;
-
-
 	}
 	// Change the unit's tension, min 0.5, max 1.5
 	changeTension(change) {
@@ -185,6 +184,7 @@ export class supUnit {
 	//Reduces damage from attack based on defense, resistances, evasion chance, and block chance. Then reduces CurrentHealth by the remaining number. 
 	takeDamage(inDamage) {
 		let totalDamage = inDamage;
+		console.log(totalDamage)
 		if (this.resistances) {
 			// Each resistance will be a positive or negative
 			//   precentage, written in decimal form

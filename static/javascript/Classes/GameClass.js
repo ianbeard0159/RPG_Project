@@ -62,3 +62,5 @@ export class GameClass {
     }
     
 }
+
+//attackbtn.addEventListener("click", runAttack , false)
