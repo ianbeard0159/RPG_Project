@@ -122,10 +122,22 @@ const inEnemys = {
             "Test Attack": {
                 description: "description",
                 attack_type: "physical",
-                AP_cost: 2,
+                AP_cost: 5,
                 ESS_cost: 7,
                 accuracy: 50,
-                damage_ratio: 60,
+                damage_ratio: 150,
+                crit_chance: 10,
+                targets: 3,
+                hits: 3,
+                aggro_per_hit: 7
+            },
+            "Test Attack 2": {
+                description: "description",
+                attack_type: "physical",
+                AP_cost: 10,
+                ESS_cost: 7,
+                accuracy: 50,
+                damage_ratio: 150,
                 crit_chance: 10,
                 targets: 3,
                 hits: 3,
@@ -152,6 +164,30 @@ const inEnemys = {
                 AP_cost: 2,
                 ESS_cost: 7,
                 accuracy: 50,
+                damage_ratio: 100,
+                crit_chance: 10,
+                targets: 3,
+                hits: 3,
+                aggro_per_hit: 7
+            },
+            "Test Attack 2": {
+                description: "description",
+                attack_type: "physical",
+                AP_cost: 2,
+                ESS_cost: 7,
+                accuracy: 50,
+                damage_ratio: 100,
+                crit_chance: 10,
+                targets: 3,
+                hits: 3,
+                aggro_per_hit: 7
+            },
+            "Test Attack 3": {
+                description: "description",
+                attack_type: "physical",
+                AP_cost: 2,
+                ESS_cost: 7,
+                accuracy: 50,
                 damage_ratio: 60,
                 crit_chance: 10,
                 targets: 3,
@@ -161,6 +197,16 @@ const inEnemys = {
         }
     }
 }
+// Sleep Function
+/*
+function sleep(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+  }
+*/
 
 // Make a list of character objects
 const testGame = new GameClass();
@@ -187,52 +233,63 @@ describe(`Take full round`, function () {
     for (let unit in testGame.turnOrder) {
         // If that unit is an enemy
         if (testGame.turnOrder[unit] == "enemy") {
-            describe(`Enemy Turn: ${unit}`, function() {
+            describe(`\n \n -= Enemy Turn: ${unit} =-`, function() {
                 let enemy = testGame.enemyList[unit];
+                enemy.startTurn();
+                // Set some initial aggro to test targeting
+                enemy.changeAggro("Monica", 3);
                 // For each attack that enemy has
                 for (let attack in enemy.attackList) {
-                    // Use the attack
                     let damageData = enemy.selectAttackTargets(attack);
-                    // For each target of the attack
-                    for (let char_name in damageData) {
-                        for (let entry in damageData[char_name]) {
-                            // If sucessful, the attack should return a damage data object
-                            test(`Target: ${char_name} - ${attack} - Hit: ${entry}`, function () {
-                                expect(damageData[char_name][entry]).toBeDefined();
-                            });
-
-                            let char = damageData[char_name][entry];
-                            let initialHP = testGame.characterList[char_name].HP_current;
-                            let initialTension = testGame.characterList[char_name].tension;
-        
-                            // The target of the attack should lose health if the attack hit
-                            const takeData = testGame.characterList[char_name].takeDamage(char.damage);
-        
-                            let newTension = testGame.characterList[char_name].tension;
-        
-                            // The current HP of the character should be the expected value
-                            let currentHP = testGame.characterList[char_name].HP_current;
-                            test(`-- ${char.result} -> ${takeData.result}: (${initialHP}hp - ${takeData.damage}dmg) = ${currentHP}`, function () {
-                                expect(currentHP).toEqual(initialHP - takeData.damage);
-                            });
-                            // The characters tension should have changed
-                            test(`-- Tension: ${initialTension} -> ${newTension} \n`, function () {
-                                expect(initialTension).not.toEqual(newTension);
-                            });
-                            test(`-- Aggro for ${char_name} changed by ${damageData[char_name][entry].aggro}`, function () {
+                    if(damageData == "not enough ap") {
+                        console.log("end turn");
+                        break;
+                    }
+                    else {// Use the attack
+                        // For each target of the attack
+                        for (let char_name in damageData) {
+                            for (let entry in damageData[char_name]) {
+                                // If sucessful, the attack should return a damage data object
+                                test(`\n Target: ${char_name} - ${attack} - Hit: ${entry}`, function () {
+                                    expect(damageData[char_name][entry]).toBeDefined();
+                                });
+    
+                                let char = damageData[char_name][entry];
+                                let initialHP = testGame.characterList[char_name].HP_current;
+                                let initialTension = testGame.characterList[char_name].tension;
+            
+                                // The target of the attack should lose health if the attack hit
+                                const takeData = testGame.characterList[char_name].takeDamage(char.damage);
+            
+                                let newTension = testGame.characterList[char_name].tension;
+            
+                                // The current HP of the character should be the expected value
+                                let currentHP = testGame.characterList[char_name].HP_current;
+                                test(`-- ${char.result} -> ${takeData.result}: (${initialHP}hp - ${takeData.damage}dmg) = ${currentHP}`, function () {
+                                    if (currentHP != 0) expect(currentHP).toEqual(initialHP - takeData.damage);
+                                });
+                                // The characters tension should have changed
+                                test(`-- Tension: ${initialTension} -> ${newTension}`, function () {
+                                    if (testGame.characterList[char_name] != "Incapacitated") expect(initialTension).not.toEqual(newTension);
+                                });
                                 // Change the aggro of the enemy towards the target
-                                let initialAggro = enemy.changeAggro(char_name, 0);
-                                let newAggro = enemy.changeAggro(char_name, 0);
                                 if(takeData.damage != 0) {
-                                    console.log(takeData.damage);
-                                    newAggro = enemy.changeAggro(char_name, (0 - damageData[char_name][entry].aggro));
+                                    let char_state = testGame.characterList[char_name].state.status;
+                                    console.log(char_state);
+                                    enemy.changeAggro(char_name, (0 - damageData[char_name][entry].aggro), char_state);
                                 }
-
-                                expect(initialAggro - damageData[char_name][entry].aggro).toEqual(newAggro);
-                            });
+                                for (let entry in enemy.aggroTab) {
+                                    test(`-- Aggro for ${enemy.aggroTab[entry].char_name} is ${enemy.aggroTab[entry].aggro}`, function () {
+                                        expect(true).toEqual(true);
+                                    });
+    
+                                }
+                            }
+    
                         }
 
                     }
+                    
                 }
             });
         }
