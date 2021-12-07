@@ -37,19 +37,16 @@ export class Enemy extends supUnit {
         let lowestAggro = this.aggroTab[0].aggro;
         for (let char in this.aggroTab) {
             if (lowestAggro > this.aggroTab[char].aggro 
-                && this.aggroTab[char].char_status != 'incapacitated') {
+                && this.aggroTab[char].char_status != 'Incapacitated') {
                 lowestAggro = this.aggroTab[char].aggro;
             }
         }
         // Subtract the lowest aggro value from every 
         // character's aggro value in the table
         // set incapacitated characters to 0
-        console.log("Loop");
         for (let char in this.aggroTab) {
-            if (this.aggroTab[char].char_status != 'incapacitated') {
-                if (lowestAggro != 0) console.log(this.aggroTab[char].char_name + ": " + this.aggroTab[char].aggro);
+            if (this.aggroTab[char].char_status != 'Incapacitated') {
                 this.aggroTab[char].aggro -= lowestAggro;
-                if (lowestAggro != 0) console.log("New: " + this.aggroTab[char].aggro);
             }
             // If a character is incapacitated, set their aggro to 0
             else {
@@ -57,10 +54,11 @@ export class Enemy extends supUnit {
             }
         }
     }
-    changeAggro(char_name, value) {
+    changeAggro(char_name, value, char_state) {
         for (let char in this.aggroTab) {
             if (this.aggroTab[char].char_name == char_name) {
                 this.aggroTab[char].aggro += value;
+                this.aggroTab[char].char_status = char_state;
                 this.updateAggro();
                 return this.aggroTab[char].aggro;
             }
@@ -100,12 +98,16 @@ export class Enemy extends supUnit {
                         // Make an initial value for equalAggro
                         //    (this block will only run if there
                         //     aren't any equal entries yet)
+                        highestAggro = tempTable[char].aggro;
                         equalAggro = [ tempTable[char] ];
                     }
                     // Create a list of targets who have equal aggro
                     else if (tempTable[char].aggro == highestAggro) {
                         equalAggro.push(tempTable[char]);
                     }
+                }
+                else {
+                    tempTable.splice(char, 1);
                 }
             }
             // If there is more than one entry in the equalAggro list
@@ -121,6 +123,7 @@ export class Enemy extends supUnit {
             let index = tempTable.indexOf(targetList[i]);
             tempTable.splice(index, 1);
         }
+        console.log(targetList);
         return targetList;
 
     }
