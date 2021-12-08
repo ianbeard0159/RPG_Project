@@ -54,12 +54,8 @@ export class Attack extends Action {
         for (let mod in dmgMods) {
             baseDamage += Math.round(baseDamage * mod.effect);
         }
-<<<<<<< HEAD
-        return { damage: baseDamage, crit: didCrit};
-=======
 
         return { damage: baseDamage, crit: didCrit, aggro: this.aggro_per_hit};
->>>>>>> ce12de75c5e26e04041b8da3b087f0f9cbc12592
     }
 
   }

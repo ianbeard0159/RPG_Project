@@ -1,11 +1,13 @@
 const url = "http://localhost:3000";
 
 import { GameClass } from './Classes/GameClass.js';
+import { Action } from './Classes/supAction.js';
 let game = new GameClass();
 let selected = [];
+let hit = 0;
 
 function generateHTML(inData, enemyData) {
-    let output = ''; 
+    let output = '';
     for (let entry in inData) {
 
         // Make a request for the attacks used for that unit
@@ -17,10 +19,10 @@ function generateHTML(inData, enemyData) {
             const attacks = JSON.parse(xhttpAttacks.responseText);
             // If there are any entries in the response
             inData[entry].attackList = {};
-            for (let attack in attacks){
+            for (let attack in attacks) {
                 // Make rows in the table for the attacks
                 inData[entry].attackList[attacks[attack].attack_name] = attacks[attack];
-                console.log(attacks[attack]);
+                //console.log(attacks[attack]);
             }
         }
         xhttpAttacks.send();
@@ -34,7 +36,7 @@ function generateHTML(inData, enemyData) {
             const supports = JSON.parse(xhttpSupports.responseText);
             // If there are any entries in the response
             inData[entry].supportList = {};
-            for (let support in supports){
+            for (let support in supports) {
                 // Make rows in the table for the supports
                 inData[entry].supportList[supports[support].support_name] = supports[support];
             }
@@ -58,27 +60,27 @@ function generateHTML(inData, enemyData) {
             // Parse the data from the response
             const attacks = JSON.parse(xhttpAttacks.responseText);
             // If there are any entries in the response
-            for (let attack in attacks){
+            for (let attack in attacks) {
                 // Make rows in the table for the attacks
                 enemyData[entry].attackList[attacks[attack].attack_name] = attacks[attack];
             }
         }
         xhttpAttacks.send();
 
-                // Make a second request for the supports used for that unit
-                const xhttpSupports = new XMLHttpRequest();
-                // Make sure the response is syncronous
-                xhttpSupports.open('GET', `${url}/getActions/enemys/supports/${enemyData[entry]['id_enemys']}`, false);
-                xhttpSupports.onload = function () {
-                    // Parse the data from the response
-                    const supports = JSON.parse(xhttpSupports.responseText);
-                    // If there are any entries in the response
-                    for (let support in supports){
-                        // Make rows in the table for the supports
-                        enemyData[entry].supportList[supports[support].support_name] = supports[support];
-                    }
-                }
-                xhttpSupports.send();
+        // Make a second request for the supports used for that unit
+        const xhttpSupports = new XMLHttpRequest();
+        // Make sure the response is syncronous
+        xhttpSupports.open('GET', `${url}/getActions/enemys/supports/${enemyData[entry]['id_enemys']}`, false);
+        xhttpSupports.onload = function () {
+            // Parse the data from the response
+            const supports = JSON.parse(xhttpSupports.responseText);
+            // If there are any entries in the response
+            for (let support in supports) {
+                // Make rows in the table for the supports
+                enemyData[entry].supportList[supports[support].support_name] = supports[support];
+            }
+        }
+        xhttpSupports.send();
     }
 
     let enemyList = {};
@@ -86,8 +88,8 @@ function generateHTML(inData, enemyData) {
         enemyList[enemyData[entry].enemy_name] = enemyData[entry];
     }
     game.populateEnemys(enemyList);
-    
-    for (let char in game.characterList) {  
+
+    for (let char in game.characterList) {
         output += `<table id=${char} style="margin: 10px; padding: 5px; background-color: lightgray;">\
             <th>${char} </th>`;
         // Display all character fields
@@ -101,16 +103,16 @@ function generateHTML(inData, enemyData) {
         }
         // Display character attacks and supports
         output += `<th> -ATTACKS- </th>`;
-        for (let attack in game.characterList[char].attackList){
+        for (let attack in game.characterList[char].attackList) {
             output += `<tr><td><strong>${attack} </strong></td></tr>\
             <tr><td>${game.characterList[char].attackList[attack].description}</tr></td>`;
         }
         output += `<th> -SUPPORTS- </th>`;
-        for (let support in game.characterList[char].supportList){
+        for (let support in game.characterList[char].supportList) {
             output += `<tr><td><strong>${support} </strong></td></tr>\
             <tr><td>${game.characterList[char].supportList[support].description}</tr></td>`;
         }
-        
+
         output += '</table>';
     }
 
@@ -132,12 +134,12 @@ function generateHTML(inData, enemyData) {
 
         // Display enemy attack and support
         output += `<th> -ATTACKS- </th>`;
-        for (let attack in game.enemyList[enemy].attackList){
+        for (let attack in game.enemyList[enemy].attackList) {
             output += `<tr><td><strong>${attack} </strong></td></tr>\
             <tr><td>${game.enemyList[enemy].attackList[attack].description}</tr></td>`;
         }
         output += `<th> -SUPPORTS- </th>`;
-        for (let support in game.enemyList[enemy].supportList){
+        for (let support in game.enemyList[enemy].supportList) {
             output += `<tr><td><strong>${support} </strong></td></tr>\
             <tr><td>${game.enemyList[enemy].supportList[support].description}</tr></td>`;
         }
@@ -146,44 +148,56 @@ function generateHTML(inData, enemyData) {
     console.log(game.enemyList);
     return output;
 }
-function generateListeners(){
+function generateListeners() {
+    //listens for the basic buttons
+    document.getElementById("attackbtn").addEventListener("click", () => attack(), false);
+}
+
+function attack() {
     // onClick listeners for the images of enemies
     for (let enemy in game.enemyList) {
-    document.getElementById(enemy).addEventListener("click", () => giveId(enemy),false);
+        let unit = document.getElementById(enemy)
+        unit.style.border = "solid red";
+        unit.action = game.characterList["Jason"].attackList['Basic Attack'] // needs to be changed to be scalable
+        unit.addEventListener("click", attackAction, false);
+        console.log("attack ready");
     }
 
-    //listens for the basic buttons
-    document.getElementById("attackbtn").addEventListener("click", () => attack(),false);
 }
 
-function attack(){
-    
-    for (let enemy in game.enemyList) {
-        document.getElementById(enemy).style.border = "solid red";
-        }
-    if(selected != []){
-        let attackData = game.characterList["Jason"].selectAttackTargets('Basic Attack', selected);
-        for (let enemy in selected) {
-            console.log(game.enemyList["Lesser Demon"].HP_current);
-            let some = game.enemyList["Lesser Demon"].takeDamage(attackData['Lesser Demon'][0].damage);
-            console.log(game.enemyList["Lesser Demon"].HP_current);
-            console.log(some);
-        }
-        console.log(attackData);
-        selected = [];
-        for (let enemy in game.enemyList) {
-            document.getElementById(enemy).style.border = "none";
-            }
-    }
-}
-
-function giveId(enemy) {
-    console.log(`id is ${enemy}`)
-    let target = {char_name: enemy,
-                char_def: game.enemyList[enemy].def,
-                char_agi: game.enemyList[enemy].agi,
-                char_tension: game.enemyList[enemy].tension};
+function attackAction() {
+    console.log("in attack action");
+    console.log(this.action.hits)
+    console.log(`${this.id} is going to be hit`);
+    let target = {
+        char_name: this.id,
+        char_def: game.enemyList[this.id].def,
+        char_agi: game.enemyList[this.id].agi,
+        char_tension: game.enemyList[this.id].tension
+    };
+    hit += 1;
     selected.push(target);
+    if (hit == this.action.hits) {
+        console.log(this.action)
+        if (selected != []) {
+            let attackData = game.characterList["Jason"].selectAttackTargets('Basic Attack', selected);
+            for (let enemy in selected) {
+                console.log("HP before damage: " + game.enemyList["Lesser Demon"].HP_current);
+                let some = game.enemyList["Lesser Demon"].takeDamage(attackData['Lesser Demon'][0].damage);
+                console.log("hp after damage: " + game.enemyList["Lesser Demon"].HP_current);
+                console.log(some);
+            }
+            console.log(attackData);
+            selected = [];
+            hit = 0;
+            for (let enemy in game.enemyList) {  
+                document.getElementById(enemy).style.border = "none";
+                document.getElementById(enemy).removeEventListener("click", attackAction, false);
+            }
+        }
+
+    }
+
 }
 
 window.onload = function () {
@@ -202,7 +216,7 @@ window.onload = function () {
                             const enemys = JSON.parse(xhttpEnemy.responseText);
                             let html = generateHTML(characters, enemys);
                             document.getElementById("container").innerHTML += html;
-                            document.getElementById("container").addEventListener('load', generateListeners());     
+                            document.getElementById("container").addEventListener('load', generateListeners());
                         }
                     }
                 }
@@ -212,4 +226,4 @@ window.onload = function () {
     }
     xhttp.send();
 
-};
+}

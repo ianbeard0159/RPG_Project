@@ -152,7 +152,7 @@ export class supUnit {
 				let damageData = this.attackList[att].dealDamage(attackStat, aimStat, dmgMods, targets[target], this.tension, this.lvl);
 				let returnStr = "Hit";
 				console.log(this.attackList[att])
-				console.log(damageData.damage);
+				console.log("damage to deal: " + damageData.damage);
 
 				if (damageData.damage == 0) {
 					returnStr = "Miss";
@@ -198,7 +198,7 @@ export class supUnit {
 	//Reduces damage from attack based on defense, resistances, evasion chance, and block chance. Then reduces CurrentHealth by the remaining number. 
 	takeDamage(inDamage) {
 		let totalDamage = inDamage;
-		console.log(totalDamage)
+		console.log("final damage: " + totalDamage)
 		if (this.resistances) {
 			// Each resistance will be a positive or negative
 			//   precentage, written in decimal form
