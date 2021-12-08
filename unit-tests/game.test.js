@@ -17,10 +17,10 @@ const inCharacters = {
             "Test Attack": {
                 description: "description",
                 attack_type: "physical",
-                AP_cost: 2,
-                ESS_cost: 7,
+                ap_cost: 2,
+                essence_cost: 7,
                 accuracy: 70,
-                damage_ratio: 60,
+                dammage_ratio: 60,
                 crit_chance: 10,
                 targets: 2,
                 hits: 1,
@@ -29,10 +29,10 @@ const inCharacters = {
             "Test Attack 2": {
                 description: "description",
                 attack_type: "electric",
-                AP_cost: 4,
-                ESS_cost: 10,
+                ap_cost: 4,
+                essence_cost: 10,
                 accuracy: 70,
-                damage_ratio: 50,
+                dammage_ratio: 50,
                 crit_chance: 10,
                 targets: 1,
                 hits: 3,
@@ -42,8 +42,8 @@ const inCharacters = {
         supportList: {
             "Test Support": {
                 description: "description",
-                AP_cost: 2,
-                ESS_cost: 7,
+                ap_cost: 2,
+                essence_cost: 7,
                 support_type: "heal",
                 base_heal: 70,
                 revive: 0,
@@ -68,10 +68,10 @@ const inCharacters = {
             "Test Attack": {
                 description: "description",
                 attack_type: "physical",
-                AP_cost: 2,
-                ESS_cost: 7,
+                ap_cost: 2,
+                essence_cost: 7,
                 accuracy: 70,
-                damage_ratio: 60,
+                dammage_ratio: 60,
                 crit_chance: 10,
                 targets: 2,
                 hits: 1,
@@ -80,10 +80,10 @@ const inCharacters = {
             "Test Attack 2": {
                 description: "description",
                 attack_type: "fire",
-                AP_cost: 4,
-                ESS_cost: 10,
+                ap_cost: 4,
+                essence_cost: 10,
                 accuracy: 70,
-                damage_ratio: 50,
+                dammage_ratio: 50,
                 crit_chance: 10,
                 targets: 1,
                 hits: 3,
@@ -93,8 +93,8 @@ const inCharacters = {
         supportList: {
             "Test Support": {
                 description: "description",
-                AP_cost: 2,
-                ESS_cost: 7,
+                ap_cost: 2,
+                essence_cost: 7,
                 support_type: "heal",
                 base_heal: 70,
                 revive: 0,
@@ -122,10 +122,10 @@ const inEnemys = {
             "Test Attack": {
                 description: "description",
                 attack_type: "physical",
-                AP_cost: 5,
-                ESS_cost: 7,
+                ap_cost: 5,
+                essence_cost: 7,
                 accuracy: 50,
-                damage_ratio: 150,
+                dammage_ratio: 150,
                 crit_chance: 10,
                 targets: 3,
                 hits: 3,
@@ -134,10 +134,10 @@ const inEnemys = {
             "Test Attack 2": {
                 description: "description",
                 attack_type: "physical",
-                AP_cost: 10,
-                ESS_cost: 7,
+                ap_cost: 10,
+                essence_cost: 7,
                 accuracy: 50,
-                damage_ratio: 150,
+                dammage_ratio: 150,
                 crit_chance: 10,
                 targets: 3,
                 hits: 3,
@@ -161,10 +161,10 @@ const inEnemys = {
             "Test Attack": {
                 description: "description",
                 attack_type: "physical",
-                AP_cost: 2,
-                ESS_cost: 7,
+                ap_cost: 2,
+                essence_cost: 7,
                 accuracy: 50,
-                damage_ratio: 100,
+                dammage_ratio: 100,
                 crit_chance: 10,
                 targets: 3,
                 hits: 3,
@@ -173,10 +173,10 @@ const inEnemys = {
             "Test Attack 2": {
                 description: "description",
                 attack_type: "physical",
-                AP_cost: 2,
-                ESS_cost: 7,
+                ap_cost: 2,
+                essence_cost: 7,
                 accuracy: 50,
-                damage_ratio: 100,
+                dammage_ratio: 100,
                 crit_chance: 10,
                 targets: 3,
                 hits: 3,
@@ -185,10 +185,10 @@ const inEnemys = {
             "Test Attack 3": {
                 description: "description",
                 attack_type: "physical",
-                AP_cost: 2,
-                ESS_cost: 7,
+                ap_cost: 2,
+                essence_cost: 7,
                 accuracy: 50,
-                damage_ratio: 60,
+                dammage_ratio: 60,
                 crit_chance: 10,
                 targets: 3,
                 hits: 3,
@@ -237,7 +237,11 @@ describe(`Take full round`, function () {
                 let enemy = testGame.enemyList[unit];
                 enemy.startTurn();
                 // Set some initial aggro to test targeting
-                enemy.changeAggro("Monica", 3);
+                if (testGame.characterList["Monica"].state.status == "Active") enemy.changeAggro("Monica", 3, "Active");
+                // Get updated character data for the enemies' agro table
+                for (let char in testGame.characterList) {
+                    enemy.changeAggro(char, 0, testGame.characterList[char].state.status);
+                }
                 // For each attack that enemy has
                 for (let attack in enemy.attackList) {
                     let damageData = enemy.selectAttackTargets(attack);
@@ -250,7 +254,7 @@ describe(`Take full round`, function () {
                         for (let char_name in damageData) {
                             for (let entry in damageData[char_name]) {
                                 // If sucessful, the attack should return a damage data object
-                                test(`\n Target: ${char_name} - ${attack} - Hit: ${entry}`, function () {
+                                test(`\n Target: ${char_name} (${testGame.characterList[char_name].state.status}) - ${attack} - Hit: ${entry}`, function () {
                                     expect(damageData[char_name][entry]).toBeDefined();
                                 });
     
@@ -270,12 +274,11 @@ describe(`Take full round`, function () {
                                 });
                                 // The characters tension should have changed
                                 test(`-- Tension: ${initialTension} -> ${newTension}`, function () {
-                                    if (testGame.characterList[char_name] != "Incapacitated") expect(initialTension).not.toEqual(newTension);
+                                    if (testGame.characterList[char_name].state.status != "Incapacitated") expect(initialTension).not.toEqual(newTension);
                                 });
                                 // Change the aggro of the enemy towards the target
                                 if(takeData.damage != 0) {
                                     let char_state = testGame.characterList[char_name].state.status;
-                                    console.log(char_state);
                                     enemy.changeAggro(char_name, (0 - damageData[char_name][entry].aggro), char_state);
                                 }
                                 for (let entry in enemy.aggroTab) {

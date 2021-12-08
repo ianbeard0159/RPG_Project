@@ -44,22 +44,15 @@ export class Attack extends Action {
     }
 
     dealDamage(attackStat, aimStat, dmgMods, target, tension, lvl) {
-        const didHit = this.hit(target, aimStat, tension)
+        const didHit = this.hit(target, aimStat, tension);
         const didCrit = this.crit();
-        console.log(target);
         // console.log(`${didHit} * ${didCrit} * sqrt( ${attackStat} / ${target.char_def} ) * ${this.damage_ratio * lvl / 2}`)
-
         let baseDamage = Math.round(didHit*didCrit*(Math.sqrt(attackStat/target.char_def)*(this.damage_ratio * lvl / 2)));
 
         for (let mod in dmgMods) {
             baseDamage += Math.round(baseDamage * mod.effect);
         }
-<<<<<<< HEAD
-        return { damage: baseDamage, crit: didCrit};
-=======
-
-        return { damage: baseDamage, crit: didCrit, aggro: this.aggro_per_hit};
->>>>>>> ce12de75c5e26e04041b8da3b087f0f9cbc12592
+        return { damage: baseDamage, crit: didCrit, aggro: this.aggro_per_hit };
     }
 
   }
