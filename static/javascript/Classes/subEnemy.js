@@ -93,7 +93,7 @@ export class Enemy extends supUnit {
             targetList.push('');
             for (let char in tempTable) {
                 // Remove all entries from equalAggro
-                if (tempTable[char].char_status != "Incapacitated") {
+                if (tempTable[char].char_status == "Active") {
                     if (tempTable[char].aggro > highestAggro) {
                         // Make an initial value for equalAggro
                         //    (this block will only run if there
@@ -123,7 +123,6 @@ export class Enemy extends supUnit {
             let index = tempTable.indexOf(targetList[i]);
             tempTable.splice(index, 1);
         }
-        console.log(targetList);
         return targetList;
 
     }
