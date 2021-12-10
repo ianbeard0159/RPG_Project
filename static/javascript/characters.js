@@ -3,7 +3,8 @@ const url = "http://localhost:3000";
 import { GameClass } from './Classes/GameClass.js';
 let game = new GameClass();
 let selected = [];
-let charSelected, numOfLesserEnemy, numOfGreaterEnemy;
+let charSelected = []; 
+let numOfLesserEnemy, numOfGreaterEnemy;
 
 // parse window.location.seach string for form data
 function getQueryVariable(variable) { 
@@ -17,7 +18,8 @@ function getQueryVariable(variable) {
     }
     console.log('Query variable %s not found', variable);
 }
-charSelected = getQueryVariable("char_selected");
+charSelected.push(getQueryVariable("char_selected_0"));
+charSelected.push(getQueryVariable("char_selected_1"));
 numOfLesserEnemy = parseInt(getQueryVariable("numberOfLesserEnemy"));
 numOfGreaterEnemy = parseInt(getQueryVariable("numberOfGreaterEnemy"));
 
@@ -61,8 +63,10 @@ function generateHTML(inData, enemyData) {
     // Populate characterList based on charSelected
     let characterList = {};
     for (let entry in inData) {
-        if(inData[entry].char_name === charSelected){
-            characterList[inData[entry].char_name] = inData[entry];
+        for(let i = 0; i < charSelected.length; i++){
+            if(inData[entry].char_name === charSelected[i]){
+                characterList[inData[entry].char_name] = inData[entry];
+            }
         }
     }
     game.populateCharacters(characterList);
