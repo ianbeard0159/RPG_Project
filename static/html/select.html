@@ -7,9 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Immortal Blade</title>
     <link rel="stylesheet" text="text/css" href="../css/index.css" />
-    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <script type='module' src="../javascript/select.js"></script>
 </head>
 
@@ -24,33 +21,44 @@
                     <li><a href='/tutorial'>Tutorial</a></li>
                 </ul>
             </div>
-            <h1>Starblade++</h1>
-            <img src="../images/Starblade_logo.webp" alt="some rpg game photo"
+            <img src="../images/Logo Concept Clear.png" alt="some rpg game photo"
                 class="logo">
         </div>
 
         <!-- +++++ CONTENT +++++ -->
         <div data-role="content" data-theme="b">
             <h1 style="text-align: center;">Immortal Blade</h1>
-            <h1>Character List & Descriptions       </h1> <h1>Enemy List & Descriptions</h1>
+
 
             <div id='container' style="display: flex"></div>
+
+            <h3>Please select your character and choose number of enemy</h3>
+                <form name="selectForm" action="/game" method="GET">
+                    
+                    <label for="Jason">Jason Character:</label>
+                    <input type="checkbox" id="Jason" name="char_selected_0" value="Jason" checked>
+                    <br>
+                    <label for="Monica">Monica Character:</label>
+                    <input type="checkbox" id="Monica" name="char_selected_1" value="Monica">
+                     <br>
+                    
+                    <label for="numberOfLesserEnemy">Enter number of Lesser Enemy: </label>
+                    <input type="number" id="numberOfLesserEnemy" name="numberOfLesserEnemy" value="1" min="0" max="5" placeholder="Enter a number" required>
+                    <br>
+                    <label for="numberOfGreaterEnemy">Enter number of Greater Enemy: </label>
+                    <input type="number" id="numberOfGreaterEnemy" name="numberOfGreaterEnemy" value="1" min="0" max="5" placeholder="Enter a number" required>
+                    <br>
+                    <input type="submit" value="Start Game">
+    
+                </form>
+
         </div>
-
-        <div>
-
-            please select your characters and enemies.
-
-            
-        </div>
-        <button onclick=location.href='/game'> Start Game</button>
 
         <!-- +++++ FOOTER +++++ -->
         <div data-role="footer">
-            <h6>&copy; 2021 by Team Spirit</h6>
+            <h6>&copy; 2021 by Team Immortal Blade</h6>
         </div>
      </div>
-
 
 </body>
 
