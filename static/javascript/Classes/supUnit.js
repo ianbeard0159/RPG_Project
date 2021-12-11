@@ -91,6 +91,7 @@ export class supUnit {
 */
 	//Run This.SelectTargets(), then perform one of the unit's available actions.
 	performAttack(att, targets) {
+		console.log(att)
 		// Make the player select a different action if they don't have enough AP
 		if (this.AP_current - this.attackList[att].AP_cost < 0) {
 			console.log('oops');
