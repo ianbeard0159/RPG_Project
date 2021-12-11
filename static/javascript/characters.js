@@ -24,6 +24,9 @@ charSelected.push(getQueryVariable("char_selected_1"));
 numOfLesserEnemy = parseInt(getQueryVariable("numberOfLesserEnemy"));
 numOfGreaterEnemy = parseInt(getQueryVariable("numberOfGreaterEnemy"));
 
+function gameLog(str) {
+    document.getElementById("game-log").innerHTML += `<p> - ${str}</p>`
+}
 
 function generateHTML() {
     let output = '';
@@ -53,7 +56,7 @@ function generateHTML() {
     // Enemy table generation
 
     for (let enemy in game.enemyList) {
-        output += `<div class="enemy-container"><img src="../images/${enemy} Sprite.png" class="sprite"> 
+        output += `<div class="enemy-container"><img src="../images/${enemy.split("_")[0]} Sprite.png" class="sprite"> 
         <table id=${enemy}tab class="unitTab">\
             <th>${enemy} </th>`;
         // Display all enemy fields
@@ -179,8 +182,9 @@ function generateGame(inData, enemyData) {
 }
 
 function generateAttackMenu(char) {
+    selected = [];
     let output = '';
-    for (let attack in char.attackList) {
+    for (let attack in game.characterList[char].attackList) {
         output += `<input type=submit value="${attack}" id="${attack}" class="menu"></input>`
     }
     document.getElementById("menu").innerHTML = output;
@@ -188,7 +192,7 @@ function generateAttackMenu(char) {
 }
 
 function generateAttackListeners(char) {
-        for (let attack in char.attackList) {
+        for (let attack in game.characterList[char].attackList) {
             let action =  document.getElementById(attack);
             action.char = char;
             action.addEventListener("click", generateTargets)
@@ -196,7 +200,7 @@ function generateAttackListeners(char) {
 }
 
 function generateTargets() {
-    let targets = this.char.attackList[this.id].targets;
+    let targets = game.characterList[this.char].attackList[this.id].targets;
     // Determine correct number of targets
     let enemyKeys = Object.keys(game.enemyList).length;
     let minTargets;
@@ -237,7 +241,7 @@ function generateTargetListeners(attack,char) {
     let listener = document.getElementById("performAttack",);
     listener.attack = attack;
     listener.char = char;
-    listener.targets = char.attackList[attack].targets;
+    listener.targets = game.characterList[char].attackList[attack].targets;
     listener.addEventListener("click", executeAttack);
 }
 
@@ -270,17 +274,20 @@ function executeAttack() {
                 }
                 targets.push(target);
             }
-            const damageData = this.char.selectAttackTargets(this.attack, targets);
+            gameLog(`${this.char} used ${this.attack}`);
+            const damageData = game.characterList[this.char].selectAttackTargets(this.attack, targets);
             playerTakeTurn(damageData,this.char);
         }
         // Invalid number of targets
         else {
             console.log("Incorrect Number");
+            gameLog("Please select the correct number of targets");
         }
     }
     // No targets
     else {
         console.log("select a target");
+        gameLog("No targets were selected");
     }
 }
 
@@ -288,12 +295,10 @@ function executeAttack() {
 let currentUnit = 0;
 
 function takeTurn() {
-    generateHTML();
     enemyLives();
 
-    let unit;
-    selected = [];
-
+    let unit = "";
+    // Check who's turn it is
     if (currentUnit < Object.keys(game.turnOrder).length) {
         unit = Object.keys(game.turnOrder)[currentUnit];
     }
@@ -305,6 +310,7 @@ function takeTurn() {
 
     if (game.turnOrder[unit] == 'enemy') {
         console.log("ENEMY_TURN: ", unit);
+        gameLog(`ENEMEY TURN: ${unit}`);
         // Enemy turn, fully automated
         const enemy = game.enemyList[unit];
         // Gains AP at start of turn
@@ -316,10 +322,12 @@ function takeTurn() {
         // Enemy uses each attack at its disposal for now
         //	(if it has enough AP)
         for (let attack in enemy.attackList) {
+            gameLog(`${unit} used ${attack}`);
             const damageData = enemy.selectAttackTargets(attack);
             console.log(damageData);
             // End turn if it doesn’t have enough AP
             if (damageData == 'not enough ap') {
+                gameLog(`But ${unit} didn't have enough AP`);
                 break;
             }
             else {
@@ -328,14 +336,36 @@ function takeTurn() {
                     // For each time the character was hit by the attack
                     for (let entry in damageData[char_name]) {
                         // Record if the attack was blocked, evaded, or taken
+                        let res = "";
+                        if (damageData[char_name][entry].result == "Miss") {
+                            res = "missed";
+                        }
+                        else if (damageData[char_name][entry].result == "Hit") {
+                            res = "hit";
+                        }
+                        else if (damageData[char_name][entry].result == "Crit") {
+                            res = "critically hit";
+                        }
+                        gameLog(`${unit} ${res} ${char_name}`)
                         const baseDamage = damageData[char_name][entry].damage;
                         const target = game.characterList[char_name]
                         const takeData = target.takeDamage(baseDamage);
                         console.log(char_name, takeData);
+                        if (takeData.result != "taken" && takeData.result != "miss") {
+                            gameLog(`${char_name} ${takeData.result}`);
+                        }
+                        if (takeData.damage != 0) {
+                            gameLog(`${char_name} took ${takeData.damage} damage`);
+                        }
                         // Change the aggro of the enemy towards the character
                         const char_status = target.state.status;
-                        const aggroChange = damageData[char_name][entry].aggro;
+                        const aggroChange = 0 - damageData[char_name][entry].aggro;
                         enemy.changeAggro(char_name, aggroChange, char_status);
+                        if (char_status == "Incapacitated") {
+                            gameLog(`${char_name} was defeated`);
+                        }
+                        enemyLives();
+                        generateHTML();
                     }
                 }
             }
@@ -344,30 +374,71 @@ function takeTurn() {
     }
     else if (game.turnOrder[unit] == 'character') {
         console.log("CHARACTER_TURN: ", unit);
+        gameLog(`CHARACTER TURN ${unit}`);
         // Character Turn (Needs Player Input) 
         const character = game.characterList[unit];
-        character.startTurn();
-        generateAttackMenu(character);
+        if (character.state.status == "Incapacitated") {
+            takeTurn();
+        }
+        else {
+            character.startTurn();
+            generateHTML();
+            generateAttackMenu(unit);
+
+        }
     }
     
 }
 
-function playerTakeTurn(damageData,char) {
+// When a player uses an attack against an enemy
+function playerTakeTurn(damageData, char) {
     console.log(damageData);
-    for (let enemy_name in damageData) {
-        // For each time the enemy was hit by the attack
-        for (let entry in damageData[enemy_name]) {
-            // Record if the attack was blocked, evaded, or taken
-            const baseDamage = damageData[enemy_name][entry].damage;
-            const target = game.enemyList[enemy_name]
-            const takeData = target.takeDamage(baseDamage);
-            console.log(enemy_name, takeData);
-            // Change the aggro of the enemy towards the character
-            const aggroChange = 0 - damageData[enemy_name][entry].aggro;
-            target.changeAggro(char, aggroChange, char.state.status);
-        }
+    if (damageData == 'not enough ap') {
+        gameLog(`But ${char} didn't have enough AP`);
+        generateAttackMenu(char);
     }
-    takeTurn()
+    else {
+        for (let enemy_name in damageData) {
+            // For each time the enemy was hit by the attack
+            for (let entry in damageData[enemy_name]) {
+                if (game.enemyList[enemy_name]) {
+                    // Record if the attack was blocked, evaded, or taken
+                    let res = "";
+                    if (damageData[enemy_name][entry].result == "Miss") {
+                        res = "missed";
+                    }
+                    else if (damageData[enemy_name][entry].result == "Hit") {
+                        res = "hit";
+                    }
+                    else if (damageData[enemy_name][entry].result == "Crit") {
+                        res = "critically hit";
+                    }
+                    gameLog(`${char} ${res} ${enemy_name}`)
+                    // Record if the attack was blocked, evaded, or taken
+                    const baseDamage = damageData[enemy_name][entry].damage;
+                    const target = game.enemyList[enemy_name]
+                    const takeData = target.takeDamage(baseDamage);
+                    console.log(enemy_name, takeData);
+                    if (takeData.result != "taken" && takeData.result != "miss") {
+                        gameLog(`${enemy_name} ${takeData.result}`);
+                    }
+                    if (takeData.damage != 0) {
+                        gameLog(`${enemy_name} took ${takeData.damage} damage`);
+                    }
+                    // Change the aggro of the enemy towards the character
+                    const aggroChange = damageData[enemy_name][entry].aggro;
+                    console.log(char, aggroChange, game.characterList[char].state.status);
+                    target.changeAggro(char, aggroChange, game.characterList[char].state.status);
+                   
+                    enemyLives();
+                    generateHTML();
+
+                } 
+            }
+        }
+
+    }
+    generateAttackMenu(char);
 }
 
 //checks win/lose conditons
@@ -388,6 +459,13 @@ function enemyLives() {
         if (game.enemyList[enemy].HP_current != 0) {
             thisGame = true;
             allEnemy = false;
+        }
+        // Remove defeated enemies from the game
+        else {
+            delete game.enemyList[enemy];
+            delete game.turnOrder[enemy];
+            console.log("TURN ORDER UPDATED: ",game.turnOrder);
+            gameLog(`${enemy} was defeated`);
         }
     }
     for (let char in game.characterList) {

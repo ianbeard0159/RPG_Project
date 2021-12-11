@@ -175,3 +175,8 @@
     display: block;
     float: inline-start;
   }
+  #game-log {
+    width: 600px;
+    height: 400px;
+    overflow: scroll;
+  }
