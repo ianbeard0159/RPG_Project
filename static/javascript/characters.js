@@ -4,6 +4,25 @@ const url = "http://localhost:3000";
 import { GameClass } from './Classes/GameClass.js';
 let game = new GameClass();
 let selected = [];
+let charSelected = []; 
+let numOfLesserEnemy, numOfGreaterEnemy;
+
+// parse window.location.seach string for form data
+function getQueryVariable(variable) { 
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+    console.log('Query variable %s not found', variable);
+}
+charSelected.push(getQueryVariable("char_selected_0"));
+charSelected.push(getQueryVariable("char_selected_1"));
+numOfLesserEnemy = parseInt(getQueryVariable("numberOfLesserEnemy"));
+numOfGreaterEnemy = parseInt(getQueryVariable("numberOfGreaterEnemy"));
 
 
 function generateHTML() {
@@ -88,10 +107,14 @@ function generateGame(inData, enemyData) {
         }
         xhttpSupports.send();
     }
-
+    // Populate characterList based on charSelected
     let characterList = {};
     for (let entry in inData) {
-        characterList[inData[entry].char_name] = inData[entry];
+        for(let i = 0; i < charSelected.length; i++){
+            if(inData[entry].char_name === charSelected[i]){
+                characterList[inData[entry].char_name] = inData[entry];
+            }
+        }
     }
     game.populateCharacters(characterList);
 
@@ -129,10 +152,27 @@ function generateGame(inData, enemyData) {
         xhttpSupports.send();
     }
 
-    let enemyList = {};
-    for (let entry in enemyData) {
-        enemyList[enemyData[entry].enemy_name] = enemyData[entry];
+    let enemyList = new Array();
+    while(numOfLesserEnemy != 0){
+        console.log("creating lesser enemy");
+        // 0 for Lesser Enemy
+        const enemySelected = 0;
+        let eName = enemyData[enemySelected].enemy_name;
+        eName = `${enemyData[enemySelected].enemy_name}_${numOfLesserEnemy}`
+        enemyList[eName] = enemyData[enemySelected];
+        numOfLesserEnemy--;
     }
+
+    while(numOfGreaterEnemy != 0){
+        console.log("creating greater enemy");
+        // 1 for Greater Enemy
+        const enemySelected = 1;
+        let eName = enemyData[enemySelected].enemy_name;
+        eName = `${enemyData[enemySelected].enemy_name}_${numOfGreaterEnemy}`
+        enemyList[eName] = enemyData[enemySelected];
+        numOfGreaterEnemy--;
+    }
+
     game.populateEnemys(enemyList);
     game.populateGame();
     console.log(game);
@@ -190,6 +230,7 @@ function targetClick() {
 }
 
 function generateTargetListeners(attack,char) {
+
     for (let enemy in game.enemyList) {
         document.getElementById(enemy).addEventListener("click", targetClick);
     }
