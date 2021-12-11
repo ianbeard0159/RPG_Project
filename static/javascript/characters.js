@@ -1,5 +1,6 @@
 const url = "http://localhost:3000";
 
+
 import { GameClass } from './Classes/GameClass.js';
 import { Action } from './Classes/supAction.js';
 let game = new GameClass();
@@ -44,7 +45,7 @@ function generateHTML() {
     // Enemy table generation
 
     for (let enemy in game.enemyList) {
-        output += `<div><img src="../images/${enemy} Sprite.png" class="sprite" id="${enemy}"> 
+        output += `<div><img src="../images/${enemy} Sprite.png" class="sprite"> 
         <table id=${enemy}tab class="unitTab">\
             <th>${enemy} </th>`;
         // Display all enemy fields
@@ -73,8 +74,6 @@ function generateHTML() {
         output += `</table> </div>`;
     }
     document.getElementById("container").innerHTML = output;
-    return
-
 }
 
 function generateGame(inData, enemyData) {
@@ -161,6 +160,52 @@ function generateGame(inData, enemyData) {
     game.populateGame();
 }
 
+function generateAttackMenu(char) {
+    let output = '';
+    for (let attack in char.attackList) {
+        output += `<input type=submit value="${attack}" id="${attack}" class="menu"></input>`
+    }
+    document.getElementById("menu").innerHTML = output;
+    generateAttackListeners(char);
+}
+
+function generateAttackListeners(char) {
+        for (let attack in char.attackList) {
+            console.log(attack)
+            let action =  document.getElementById(attack);
+            action.char = char;
+            action.addEventListener("click", generateTargets)
+        }
+}
+
+function generateTargets() {
+    let output = '';
+    for (let enemy in game.enemyList) {
+        output += `<input type=submit value="${enemy}" id="${enemy}" class="menu"></input>`
+        document.getElementById("menu").innerHTML += output
+    }
+    document.getElementById("menu").innerHTML = output;
+    generateTargetListeners(this.id, this.char);
+}
+
+function generateTargetListeners(attack,char) {
+    for (let enemy in game.enemyList) {
+        let listener = document.getElementById(enemy);
+        listener.attack = attack;
+        listener.char = char;
+        listener.addEventListener("click", executeAttack);
+    }
+}
+
+function executeAttack() {
+    console.log(this.id)
+    console.log(this.attack)
+    console.log(this.char)
+    addTarget(this.id);
+    const damageData = this.char.selectAttackTargets(this.attack, selected);
+    playerTakeTurn(damageData,this.char);
+}
+
 function addTarget(enemy) {
 
     let target = {
@@ -172,116 +217,78 @@ function addTarget(enemy) {
     selected.push(target);
 }
 
-function main() {
-    do {
-        console.log("in main game");
-        console.log(game);
-        for (let unit in game.turnOrder) {
+function takeTurn() {
+    generateHTML();
+    enemyLives();
+    console.log("in main game");
+    console.log(game);
+    for (let unit in game.turnOrder) {
 
-            console.log("enemy turn")
-            if (game.turnOrder[unit] == 'enemy') {
-                // Enemy turn, fully automated
-                const enemy = game.enemyList[unit];
-                // Gains AP at start of turn
-                enemy.startTurn();
-                // Get updated character data for aggro table
-                for (let char in game.characterList) {
-                    enemy.changeAggro(char, 0, game.characterList[char].state.status);
+        console.log("enemy turn")
+        if (game.turnOrder[unit] == 'enemy') {
+            // Enemy turn, fully automated
+            const enemy = game.enemyList[unit];
+            // Gains AP at start of turn
+            enemy.startTurn();
+            // Get updated character data for aggro table
+            for (let char in game.characterList) {
+                enemy.changeAggro(char, 0, game.characterList[char].state.status);
+            }
+            // Enemy uses each attack at its disposal for now
+            //	(if it has enough AP)
+            for (let attack in enemy.attackList) {
+                const damageData = enemy.selectAttackTargets(attack);
+                // End turn if it doesn’t have enough AP
+                if (damageData != 'not enough ap') {
+                    break;
                 }
-                // Enemy uses each attack at its disposal for now
-                //	(if it has enough AP)
-                for (let attack in enemy.attackList) {
-                    const damageData = enemy.selectAttackTargets(attack);
-                    // End turn if it doesn’t have enough AP
-                    if (damageData != 'not enough ap') {
-                        break;
-                    }
-                    else {
-                        // For each character that was targeted
-                        for (let char_name in damageData) {
-                            // For each time the character was hit by the attack
-                            for (let entry in damageData[char_name]) {
-                                // Record if the attack was blocked, evaded, or taken
-                                const baseDamage = damageData[char_name][entry].damage;
-                                const target = game.characterList[char_name]
-                                const takeData = target.takeDamage(baseDamage);
-                                // Change the aggro of the enemy towards the character
-                                const char_status = target.state.status;
-                                const aggroChange = damageData[char_name][entry].aggro;
-                                enemy.changeAggro(char_name, aggroChange, char_status);
-                            }
+                else {
+                    // For each character that was targeted
+                    for (let char_name in damageData) {
+                        // For each time the character was hit by the attack
+                        for (let entry in damageData[char_name]) {
+                            // Record if the attack was blocked, evaded, or taken
+                            const baseDamage = damageData[char_name][entry].damage;
+                            const target = game.characterList[char_name]
+                            const takeData = target.takeDamage(baseDamage);
+                            // Change the aggro of the enemy towards the character
+                            const char_status = target.state.status;
+                            const aggroChange = damageData[char_name][entry].aggro;
+                            enemy.changeAggro(char_name, aggroChange, char_status);
                         }
                     }
                 }
             }
-            else if (game.turnOrder[unit] == 'character') {
-
-                console.log("character turn")
-                // Character Turn (Needs Player Input) 
-                const character = game.characterList[unit];
-                character.startTurn();
-                console.log(character);
-
-                // Player Selects Attack
-                let actionText = '\n';
-                for (let attack in character.attackList) {
-                    actionText += attack + ' \n'
-                }
-                let action;
-                let moveOn = false;
-
-                do {
-
-                    action = prompt(`It's ${unit}'s turn, which attack would you like to do?
-                                    Your options are: ${actionText}`)
-
-                    for (let attack in character.attackList) {
-                        if (character.attackList[action] == attack) {
-                            moveOn = true;
-                        }
-                    }
-
-                } while (moveOn);
-
-                // Player Selects Targets for Attack
-                let targetText = '\n';
-                for (let enemy in game.enemyList) {
-                    targetText += enemy + ' \n'
-                }
-                let target;
-                moveOn = false;
-                do {
-                    target = prompt(`${action} selected, who is your target
-                                    Your options are: ${targetText}`);
-
-                    for (let enemy in game.enemyList) {
-                        if (game.enemyList[target] == enemy) {
-                            moveOn = false
-                        }
-                    }
-                } while (moveOn);
-
-                addTarget(target);
-                const damageData = character.selectAttackTargets(action, selected);
-                // Should generate a damageData object just like Enemy Attacks
-                for (let enemy_name in damageData) {
-                    // For each time the enemy was hit by the attack
-                    for (let entry in damageData[enemy_name]) {
-                        // Record if the attack was blocked, evaded, or taken
-                        const baseDamage = damageData[enemy_name][entry].damage;
-                        const target = game.enemyList[enemy_name]
-                        const takeData = target.takeDamage(baseDamage);
-                        console.log(takeData);
-                        // Change the aggro of the enemy towards the character
-                        const aggroChange = 0 - damageData[enemy_name][entry].aggro;
-                        target.changeAggro(unit, aggroChange, character.state.status);
-                    }
-                }
-            }
-            generateHTML();
+            takeTurn();
+            break;
+        }
+        else if (game.turnOrder[unit] == 'character') {
+            console.log("character turn")
+            // Character Turn (Needs Player Input) 
+            const character = game.characterList[unit];
+            character.startTurn();
+            generateAttackMenu(character)
+            break;
         }
     }
-    while (enemyLives());
+}
+
+function playerTakeTurn(damageData,char) {
+    console.log(damageData);
+    for (let enemy_name in damageData) {
+        // For each time the enemy was hit by the attack
+        for (let entry in damageData[enemy_name]) {
+            // Record if the attack was blocked, evaded, or taken
+            const baseDamage = damageData[enemy_name][entry].damage;
+            const target = game.enemyList[enemy_name]
+            const takeData = target.takeDamage(baseDamage);
+            console.log(takeData);
+            // Change the aggro of the enemy towards the character
+            const aggroChange = 0 - damageData[enemy_name][entry].aggro;
+            target.changeAggro(char, aggroChange, char.state.status);
+        }
+    }
+    takeTurn()
 }
 
 //checks win/lose conditons
@@ -341,9 +348,8 @@ window.onload = function () {
                             const enemys = JSON.parse(xhttpEnemy.responseText);
                             generateGame(characters, enemys)
                             generateHTML();
-                            setTimeout(() => {
-                                main();
-                            }, 500);
+                            document.getElementById("endTurnBtn").addEventListener("click",takeTurn);
+                            takeTurn();
                         }
                     }
                 }

@@ -153,3 +153,8 @@
   .spacing{
     width: 100px;
   }
+
+  #menu {
+    display: block;
+    float: inline-start;
+  }
