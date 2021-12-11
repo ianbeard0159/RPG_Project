@@ -28,7 +28,7 @@ export class supUnit {
 		// Resources
 		this.HP_max = ratio_HP * Math.round(Math.sqrt(lvl));
 		this.HP_current = this.HP_max;
-		this.AP_max = ratio_AP * Math.round(Math.sqrt(lvl));
+		this.AP_max = ratio_AP + Math.round(Math.sqrt(lvl));
 		this.AP_current = 0; 
 		this.ESS_max = ratio_ESS * Math.round(Math.sqrt(lvl));
 		this.ESS_current = this.ESS_max;
@@ -41,7 +41,13 @@ export class supUnit {
 		}; 
 	}
 	startTurn() {
-		this.AP_current += this.AP_max;
+		let ap = this.AP_current + Math.round(this.AP_max / 2)
+		if (ap < this.AP_max) {
+			this.AP_current = ap;
+		}
+		else {
+			this.AP_current = this.AP_max;
+		}
 	}
 
 	// Take input from API request to assign actions to the character

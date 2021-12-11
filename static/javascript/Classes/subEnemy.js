@@ -59,6 +59,7 @@ export class Enemy extends supUnit {
             if (this.aggroTab[char].char_name == char_name) {
                 this.aggroTab[char].aggro += value;
                 this.aggroTab[char].char_status = char_state;
+                console.log("AGGRO TOWARDS ", char_name, " = ", this.aggroTab[char].aggro);
                 this.updateAggro();
                 return this.aggroTab[char].aggro;
             }
