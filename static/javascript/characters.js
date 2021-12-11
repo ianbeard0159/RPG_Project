@@ -1,11 +1,83 @@
 const url = "http://localhost:3000";
 
 import { GameClass } from './Classes/GameClass.js';
+import { Action } from './Classes/supAction.js';
 let game = new GameClass();
 let selected = [];
 
-function generateHTML(inData, enemyData) {
-    let output = ''; 
+
+function generateHTML() {
+    let output = '';
+    for (let char in game.characterList) {
+        output += `<div><img src="../images/${char} Sprite.png" class="sprite" id="${char}">
+                    <table id=${char} class="unitTab">\
+            <th>${char} </th>`;
+        // Display all character fields
+        for (let field in game.characterList[char]) {
+            if (field != 'id_characters' && field != 'attackList' && field != 'supportList') {
+                if (field == 'HP_max' || field == 'HP_current' || field == 'AP_current' || field == 'ESS_Max' || field == 'ESS_current' || field == 'tension') {
+                    output += `<tr>\
+                <td>${field}</td>\
+                <td>${game.characterList[char][field]}</td>\
+                </tr>`;
+                }
+            }
+        }
+        // Display character attacks and supports
+        output += `<th> -ATTACKS- </th>`;
+        for (let attack in game.characterList[char].attackList) {
+            output += `<tr><td><strong>${attack} </strong></td></tr>\
+            <tr><td>${game.characterList[char].attackList[attack].description}</tr></td>`;
+        }
+        output += `<th> -SUPPORTS- </th>`;
+        for (let support in game.characterList[char].supportList) {
+            output += `<tr><td><strong>${support} </strong></td></tr>\
+            <tr><td>${game.characterList[char].supportList[support].description}</tr></td>`;
+        }
+
+        output += '</table> </div>';
+    }
+
+    //dramatic spacing
+    output += '<div class="spacing"> </div>'
+
+    // Enemy table generation
+
+    for (let enemy in game.enemyList) {
+        output += `<div><img src="../images/${enemy} Sprite.png" class="sprite" id="${enemy}"> 
+        <table id=${enemy}tab class="unitTab">\
+            <th>${enemy} </th>`;
+        // Display all enemy fields
+        for (let field in game.enemyList[enemy]) {
+            if (field != 'id_enemys' && field != 'attackList' && field != 'supportList') {
+                if (field == 'HP_max' || field == 'HP_current' || field == 'AP_current' || field == 'ESS_Max' || field == 'ESS_current' || field == 'tension') {
+                    output += `<tr>\
+                <td>${field}</td>\
+                <td>${game.enemyList[enemy][field]}</td>\
+                </tr>`;
+                }
+            }
+        }
+
+        // Display enemy attack and support
+        output += `<th> -ATTACKS- </th>`;
+        for (let attack in game.enemyList[enemy].attackList) {
+            output += `<tr><td><strong>${attack} </strong></td></tr>\
+            <tr><td>${game.enemyList[enemy].attackList[attack].description}</tr></td>`;
+        }
+        output += `<th> -SUPPORTS- </th>`;
+        for (let support in game.enemyList[enemy].supportList) {
+            output += `<tr><td><strong>${support} </strong></td></tr>\
+            <tr><td>${game.enemyList[enemy].supportList[support].description}</tr></td>`;
+        }
+        output += `</table> </div>`;
+    }
+    document.getElementById("container").innerHTML = output;
+    return
+
+}
+
+function generateGame(inData, enemyData) {
     for (let entry in inData) {
 
         // Make a request for the attacks used for that unit
@@ -17,10 +89,9 @@ function generateHTML(inData, enemyData) {
             const attacks = JSON.parse(xhttpAttacks.responseText);
             // If there are any entries in the response
             inData[entry].attackList = {};
-            for (let attack in attacks){
+            for (let attack in attacks) {
                 // Make rows in the table for the attacks
                 inData[entry].attackList[attacks[attack].attack_name] = attacks[attack];
-                console.log(attacks[attack]);
             }
         }
         xhttpAttacks.send();
@@ -34,13 +105,14 @@ function generateHTML(inData, enemyData) {
             const supports = JSON.parse(xhttpSupports.responseText);
             // If there are any entries in the response
             inData[entry].supportList = {};
-            for (let support in supports){
+            for (let support in supports) {
                 // Make rows in the table for the supports
                 inData[entry].supportList[supports[support].support_name] = supports[support];
             }
         }
         xhttpSupports.send();
     }
+
     let characterList = {};
     for (let entry in inData) {
         characterList[inData[entry].char_name] = inData[entry];
@@ -58,27 +130,27 @@ function generateHTML(inData, enemyData) {
             // Parse the data from the response
             const attacks = JSON.parse(xhttpAttacks.responseText);
             // If there are any entries in the response
-            for (let attack in attacks){
+            for (let attack in attacks) {
                 // Make rows in the table for the attacks
                 enemyData[entry].attackList[attacks[attack].attack_name] = attacks[attack];
             }
         }
         xhttpAttacks.send();
 
-                // Make a second request for the supports used for that unit
-                const xhttpSupports = new XMLHttpRequest();
-                // Make sure the response is syncronous
-                xhttpSupports.open('GET', `${url}/getActions/enemys/supports/${enemyData[entry]['id_enemys']}`, false);
-                xhttpSupports.onload = function () {
-                    // Parse the data from the response
-                    const supports = JSON.parse(xhttpSupports.responseText);
-                    // If there are any entries in the response
-                    for (let support in supports){
-                        // Make rows in the table for the supports
-                        enemyData[entry].supportList[supports[support].support_name] = supports[support];
-                    }
-                }
-                xhttpSupports.send();
+        // Make a second request for the supports used for that unit
+        const xhttpSupports = new XMLHttpRequest();
+        // Make sure the response is syncronous
+        xhttpSupports.open('GET', `${url}/getActions/enemys/supports/${enemyData[entry]['id_enemys']}`, false);
+        xhttpSupports.onload = function () {
+            // Parse the data from the response
+            const supports = JSON.parse(xhttpSupports.responseText);
+            // If there are any entries in the response
+            for (let support in supports) {
+                // Make rows in the table for the supports
+                enemyData[entry].supportList[supports[support].support_name] = supports[support];
+            }
+        }
+        xhttpSupports.send();
     }
 
     let enemyList = {};
@@ -86,104 +158,171 @@ function generateHTML(inData, enemyData) {
         enemyList[enemyData[entry].enemy_name] = enemyData[entry];
     }
     game.populateEnemys(enemyList);
-    
-    for (let char in game.characterList) {  
-        output += `<table id=${char} style="margin: 10px; padding: 5px; background-color: lightgray;">\
-            <th>${char} </th>`;
-        // Display all character fields
-        for (let field in game.characterList[char]) {
-            if (field != 'id_characters' && field != 'attackList' && field != 'supportList') {
-                output += `<tr>\
-                <td>${field}</td>\
-                <td>${game.characterList[char][field]}</td>\
-                </tr>`;
-            }
-        }
-        // Display character attacks and supports
-        output += `<th> -ATTACKS- </th>`;
-        for (let attack in game.characterList[char].attackList){
-            output += `<tr><td><strong>${attack} </strong></td></tr>\
-            <tr><td>${game.characterList[char].attackList[attack].description}</tr></td>`;
-        }
-        output += `<th> -SUPPORTS- </th>`;
-        for (let support in game.characterList[char].supportList){
-            output += `<tr><td><strong>${support} </strong></td></tr>\
-            <tr><td>${game.characterList[char].supportList[support].description}</tr></td>`;
-        }
-        
-        output += '</table>';
-    }
-
-    // Enemy table generation
-
-    for (let enemy in game.enemyList) {
-        output += `<img src="../images/Jason8.png" class="en" id="${enemy}" style="height: 80px; width: 60px; display: block; border-color: red; border-style: none"> 
-        <table id=${enemy}tab  style="margin: 10px; padding: 5px; background-color: lightgray;">\
-            <th>${enemy} </th>`;
-        // Display all enemy fields
-        for (let field in game.enemyList[enemy]) {
-            if (field != 'id_enemys' && field != 'attackList' && field != 'supportList') {
-                output += `<tr>\
-                <td>${field}</td>\
-                <td>${game.enemyList[enemy][field]}</td>\
-                </tr>`;
-            }
-        }
-
-        // Display enemy attack and support
-        output += `<th> -ATTACKS- </th>`;
-        for (let attack in game.enemyList[enemy].attackList){
-            output += `<tr><td><strong>${attack} </strong></td></tr>\
-            <tr><td>${game.enemyList[enemy].attackList[attack].description}</tr></td>`;
-        }
-        output += `<th> -SUPPORTS- </th>`;
-        for (let support in game.enemyList[enemy].supportList){
-            output += `<tr><td><strong>${support} </strong></td></tr>\
-            <tr><td>${game.enemyList[enemy].supportList[support].description}</tr></td>`;
-        }
-        output += `</table>`;
-    }
-    console.log(game.enemyList);
-    return output;
-}
-function generateListeners(){
-    // onClick listeners for the images of enemies
-    for (let enemy in game.enemyList) {
-    document.getElementById(enemy).addEventListener("click", () => giveId(enemy),false);
-    }
-
-    //listens for the basic buttons
-    document.getElementById("attackbtn").addEventListener("click", () => attack(),false);
+    game.populateGame();
 }
 
-function attack(){
-    
-    for (let enemy in game.enemyList) {
-        document.getElementById(enemy).style.border = "solid red";
-        }
-    if(selected != []){
-        let attackData = game.characterList["Jason"].selectAttackTargets('Basic Attack', selected);
-        for (let enemy in selected) {
-            console.log(game.enemyList["Lesser Demon"].HP_current);
-            let some = game.enemyList["Lesser Demon"].takeDamage(attackData['Lesser Demon'][0].damage);
-            console.log(game.enemyList["Lesser Demon"].HP_current);
-            console.log(some);
-        }
-        console.log(attackData);
-        selected = [];
-        for (let enemy in game.enemyList) {
-            document.getElementById(enemy).style.border = "none";
-            }
-    }
-}
+function addTarget(enemy) {
 
-function giveId(enemy) {
-    console.log(`id is ${enemy}`)
-    let target = {char_name: enemy,
-                char_def: game.enemyList[enemy].def,
-                char_agi: game.enemyList[enemy].agi,
-                char_tension: game.enemyList[enemy].tension};
+    let target = {
+        char_name: enemy,
+        char_def: game.enemyList[enemy].def,
+        char_agi: game.enemyList[enemy].agi,
+        char_tension: game.enemyList[enemy].tension
+    };
     selected.push(target);
+}
+
+function main() {
+    do {
+        console.log("in main game");
+        console.log(game);
+        for (let unit in game.turnOrder) {
+
+            console.log("enemy turn")
+            if (game.turnOrder[unit] == 'enemy') {
+                // Enemy turn, fully automated
+                const enemy = game.enemyList[unit];
+                // Gains AP at start of turn
+                enemy.startTurn();
+                // Get updated character data for aggro table
+                for (let char in game.characterList) {
+                    enemy.changeAggro(char, 0, game.characterList[char].state.status);
+                }
+                // Enemy uses each attack at its disposal for now
+                //	(if it has enough AP)
+                for (let attack in enemy.attackList) {
+                    const damageData = enemy.selectAttackTargets(attack);
+                    // End turn if it doesn’t have enough AP
+                    if (damageData != 'not enough ap') {
+                        break;
+                    }
+                    else {
+                        // For each character that was targeted
+                        for (let char_name in damageData) {
+                            // For each time the character was hit by the attack
+                            for (let entry in damageData[char_name]) {
+                                // Record if the attack was blocked, evaded, or taken
+                                const baseDamage = damageData[char_name][entry].damage;
+                                const target = game.characterList[char_name]
+                                const takeData = target.takeDamage(baseDamage);
+                                // Change the aggro of the enemy towards the character
+                                const char_status = target.state.status;
+                                const aggroChange = damageData[char_name][entry].aggro;
+                                enemy.changeAggro(char_name, aggroChange, char_status);
+                            }
+                        }
+                    }
+                }
+            }
+            else if (game.turnOrder[unit] == 'character') {
+
+                console.log("character turn")
+                // Character Turn (Needs Player Input) 
+                const character = game.characterList[unit];
+                character.startTurn();
+                console.log(character);
+
+                // Player Selects Attack
+                let actionText = '\n';
+                for (let attack in character.attackList) {
+                    actionText += attack + ' \n'
+                }
+                let action;
+                let moveOn = false;
+
+                do {
+
+                    action = prompt(`It's ${unit}'s turn, which attack would you like to do?
+                                    Your options are: ${actionText}`)
+
+                    for (let attack in character.attackList) {
+                        if (character.attackList[action] == attack) {
+                            moveOn = true;
+                        }
+                    }
+
+                } while (moveOn);
+
+                // Player Selects Targets for Attack
+                let targetText = '\n';
+                for (let enemy in game.enemyList) {
+                    targetText += enemy + ' \n'
+                }
+                let target;
+                moveOn = false;
+                do {
+                    target = prompt(`${action} selected, who is your target
+                                    Your options are: ${targetText}`);
+
+                    for (let enemy in game.enemyList) {
+                        if (game.enemyList[target] == enemy) {
+                            moveOn = false
+                        }
+                    }
+                } while (moveOn);
+
+                addTarget(target);
+                const damageData = character.selectAttackTargets(action, selected);
+                // Should generate a damageData object just like Enemy Attacks
+                for (let enemy_name in damageData) {
+                    // For each time the enemy was hit by the attack
+                    for (let entry in damageData[enemy_name]) {
+                        // Record if the attack was blocked, evaded, or taken
+                        const baseDamage = damageData[enemy_name][entry].damage;
+                        const target = game.enemyList[enemy_name]
+                        const takeData = target.takeDamage(baseDamage);
+                        console.log(takeData);
+                        // Change the aggro of the enemy towards the character
+                        const aggroChange = 0 - damageData[enemy_name][entry].aggro;
+                        target.changeAggro(unit, aggroChange, character.state.status);
+                    }
+                }
+            }
+            generateHTML();
+        }
+    }
+    while (enemyLives());
+}
+
+//checks win/lose conditons
+function enemyLives() {
+    console.log("enemy lives check");
+
+    //are all enemies dead?
+    let allEnemy = true;
+
+    //are all characters dead?
+    let allChar = true;
+
+    //is the game over?
+    let thisGame = false;
+
+    //two for loops check if all enemies or characters are at hp 0 and sets values accordingly.
+    for (let enemy in game.enemyList) {
+        console.log(enemy)
+        if (game.enemyList[enemy].HP_current != 0) {
+            thisGame = true;
+            allEnemy = false;
+        }
+    }
+    for (let char in game.characterList) {
+        if (game.characterList[char].HP_current != 0) {
+            console.log(char)
+            thisGame = true;
+            allChar = false;
+        }
+    }
+    if (allEnemy) {
+        //you win
+        console.log("all enemies are dead");
+        window.alert("All your enemies are dead. Victory")
+    }
+    if (allChar) {
+        //you lost
+        console.log("all characters are dead")
+        window.alert("Your party are dead. Your story ends here.")
+    }
+    return thisGame;
 }
 
 window.onload = function () {
@@ -200,9 +339,11 @@ window.onload = function () {
                         if (xhttpEnemy.status === 200) {
                             const characters = JSON.parse(xhttp.responseText);
                             const enemys = JSON.parse(xhttpEnemy.responseText);
-                            let html = generateHTML(characters, enemys);
-                            document.getElementById("container").innerHTML += html;
-                            document.getElementById("container").addEventListener('load', generateListeners());     
+                            generateGame(characters, enemys)
+                            generateHTML();
+                            setTimeout(() => {
+                                main();
+                            }, 500);
                         }
                     }
                 }
@@ -212,4 +353,4 @@ window.onload = function () {
     }
     xhttp.send();
 
-};
+}
