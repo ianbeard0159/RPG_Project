@@ -64,6 +64,7 @@ function generateGame(inData, enemyData) {
     for (let entry in inData) {
         const xhttpSupports = new XMLHttpRequest();
         // Make sure the response is syncronous
+        console.log(inData[entry].char_name, inData[entry].id_characters);
         xhttpSupports.open('GET', `${url}/getActions/characters/supports/${inData[entry]['id_characters']}`, false);
         xhttpSupports.onload = function () {
             // Parse the data from the response
@@ -91,7 +92,7 @@ function generateGame(inData, enemyData) {
             }
         }
         xhttpAttacks.send();
-        characterList[inData[entry].char_name] = inData[0];
+        characterList[inData[entry].char_name] = inData[entry];
     }
     console.log(characterList);
     // Populate characterList based on charSelected
