@@ -33,22 +33,7 @@
             <div id='container' style="display: flex"></div>
 
             <h3>Please select your character and choose number of enemy</h3>
-                <form name="selectForm" action="/game" method="GET">
-                    
-                    <label for="Jason">Jason Character:</label>
-                    <input type="checkbox" id="Jason" name="char_selected_0" value="Jason" checked>
-                    <br>
-                    <label for="Monica">Monica Character:</label>
-                    <input type="checkbox" id="Monica" name="char_selected_1" value="Monica">
-                     <br>
-                    
-                    <label for="numberOfLesserEnemy">Enter number of Lesser Enemy: </label>
-                    <input type="number" id="numberOfLesserEnemy" name="numberOfLesserEnemy" value="1" min="0" max="5" placeholder="Enter a number" required>
-                    <br>
-                    <label for="numberOfGreaterEnemy">Enter number of Greater Enemy: </label>
-                    <input type="number" id="numberOfGreaterEnemy" name="numberOfGreaterEnemy" value="1" min="0" max="5" placeholder="Enter a number" required>
-                    <br>
-                    <input type="submit" value="Start Game">
+                <form id="select-form" name="selectForm" action="/game" method="GET">
     
                 </form>
 

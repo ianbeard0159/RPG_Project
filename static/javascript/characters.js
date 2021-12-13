@@ -1,28 +1,11 @@
 const url = "http://localhost:3000";
+const imgUrl = "..";
 
 
 import { GameClass } from './Classes/GameClass.js';
 let game = new GameClass();
 let selected = [];
-let charSelected = []; 
-let numOfLesserEnemy, numOfGreaterEnemy;
 
-// parse window.location.seach string for form data
-function getQueryVariable(variable) { 
-    var query = window.location.search.substring(1);
-    var vars = query.split('&');
-    for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split('=');
-        if (decodeURIComponent(pair[0]) == variable) {
-            return decodeURIComponent(pair[1]);
-        }
-    }
-    console.log('Query variable %s not found', variable);
-}
-charSelected.push(getQueryVariable("char_selected_0"));
-charSelected.push(getQueryVariable("char_selected_1"));
-numOfLesserEnemy = parseInt(getQueryVariable("numberOfLesserEnemy"));
-numOfGreaterEnemy = parseInt(getQueryVariable("numberOfGreaterEnemy"));
 
 function gameLog(str) {
     document.getElementById("game-log").innerHTML += `<p> - ${str}</p>`
@@ -31,7 +14,7 @@ function gameLog(str) {
 function generateHTML() {
     let output = '';
     for (let char in game.characterList) {
-        output += `<div class="char-container"><img src="../images/${char} Sprite.png" class="sprite" id="${char}">
+        output += `<div class="char-container"><img src="${imgUrl}/images/${char} Sprite.png" class="sprite" id="${char}">
                     <table id=${char} class="unitTab">\
             <th>${char} </th>`;
         // Display all character fields
@@ -56,7 +39,7 @@ function generateHTML() {
     // Enemy table generation
 
     for (let enemy in game.enemyList) {
-        output += `<div class="enemy-container"><img src="../images/${enemy.split("_")[0]} Sprite.png" class="sprite"> 
+        output += `<div class="enemy-container"><img src="${imgUrl}/images/${enemy.split("_")[0]} Sprite.png" class="sprite"> 
         <table id=${enemy}tab class="unitTab">\
             <th>${enemy} </th>`;
         // Display all enemy fields
@@ -75,26 +58,10 @@ function generateHTML() {
     document.getElementById("container").innerHTML = output;
 }
 
+
 function generateGame(inData, enemyData) {
+    let characterList = {};
     for (let entry in inData) {
-
-        // Make a request for the attacks used for that unit
-        const xhttpAttacks = new XMLHttpRequest();
-        // Make sure the response is syncronous
-        xhttpAttacks.open('GET', `${url}/getActions/characters/attacks/${inData[entry]['id_characters']}`, false);
-        xhttpAttacks.onload = function () {
-            // Parse the data from the response
-            const attacks = JSON.parse(xhttpAttacks.responseText);
-            // If there are any entries in the response
-            inData[entry].attackList = {};
-            for (let attack in attacks) {
-                // Make rows in the table for the attacks
-                inData[entry].attackList[attacks[attack].attack_name] = attacks[attack];
-            }
-        }
-        xhttpAttacks.send();
-
-        // Make a request for the supports used for that unit
         const xhttpSupports = new XMLHttpRequest();
         // Make sure the response is syncronous
         xhttpSupports.open('GET', `${url}/getActions/characters/supports/${inData[entry]['id_characters']}`, false);
@@ -109,37 +76,29 @@ function generateGame(inData, enemyData) {
             }
         }
         xhttpSupports.send();
-    }
-    // Populate characterList based on charSelected
-    let characterList = {};
-    for (let entry in inData) {
-        for(let i = 0; i < charSelected.length; i++){
-            if(inData[entry].char_name === charSelected[i]){
-                characterList[inData[entry].char_name] = inData[entry];
-            }
-        }
-    }
-    game.populateCharacters(characterList);
-
-    for (let entry in enemyData) {
-        enemyData[entry].attackList = {};
-        enemyData[entry].supportList = {};
-        // Make a second request for the attacks used for that unit
+        // Make a request for the supports used for that unit
         const xhttpAttacks = new XMLHttpRequest();
         // Make sure the response is syncronous
-        xhttpAttacks.open('GET', `${url}/getActions/enemys/attacks/${enemyData[entry]['id_enemys']}`, false);
+        xhttpAttacks.open('GET', `${url}/getActions/characters/attacks/${inData[entry]['id_characters']}`, false);
         xhttpAttacks.onload = function () {
             // Parse the data from the response
             const attacks = JSON.parse(xhttpAttacks.responseText);
             // If there are any entries in the response
+            inData[entry].attackList = {};
             for (let attack in attacks) {
                 // Make rows in the table for the attacks
-                enemyData[entry].attackList[attacks[attack].attack_name] = attacks[attack];
+                inData[entry].attackList[attacks[attack].attack_name] = attacks[attack];
             }
         }
         xhttpAttacks.send();
-
-        // Make a second request for the supports used for that unit
+        characterList[inData[entry].char_name] = inData[0];
+    }
+    console.log(characterList);
+    // Populate characterList based on charSelected
+    
+    let enemyList = {};
+    for (let entry in enemyData) {
+        console.log("ENTRY: ", enemyData[entry]);
         const xhttpSupports = new XMLHttpRequest();
         // Make sure the response is syncronous
         xhttpSupports.open('GET', `${url}/getActions/enemys/supports/${enemyData[entry]['id_enemys']}`, false);
@@ -147,38 +106,39 @@ function generateGame(inData, enemyData) {
             // Parse the data from the response
             const supports = JSON.parse(xhttpSupports.responseText);
             // If there are any entries in the response
+            enemyData[entry].supportList = {};
             for (let support in supports) {
                 // Make rows in the table for the supports
                 enemyData[entry].supportList[supports[support].support_name] = supports[support];
             }
         }
         xhttpSupports.send();
+        // Make a request for the supports used for that unit
+        const xhttpAttacks = new XMLHttpRequest();
+        // Make sure the response is syncronous
+        xhttpAttacks.open('GET', `${url}/getActions/enemys/attacks/${enemyData[entry]['id_enemys']}`, false);
+        xhttpAttacks.onload = function () {
+            // Parse the data from the response
+            const attacks = JSON.parse(xhttpAttacks.responseText);
+            // If there are any entries in the response
+            enemyData[entry].attackList = {};
+            for (let attack in attacks) {
+                // Make rows in the table for the attacks
+                enemyData[entry].attackList[attacks[attack].attack_name] = attacks[attack];
+            }
+        }
+        xhttpAttacks.send();
+        enemyList[enemyData[entry].enemy_name + `_${enemyData[entry].num}`] = enemyData[entry];
     }
+    console.log(enemyList);
 
-    let enemyList = new Array();
-    while(numOfLesserEnemy != 0){
-        console.log("creating lesser enemy");
-        // 0 for Lesser Enemy
-        const enemySelected = 0;
-        let eName = enemyData[enemySelected].enemy_name;
-        eName = `${enemyData[enemySelected].enemy_name}_${numOfLesserEnemy}`
-        enemyList[eName] = enemyData[enemySelected];
-        numOfLesserEnemy--;
-    }
-
-    while(numOfGreaterEnemy != 0){
-        console.log("creating greater enemy");
-        // 1 for Greater Enemy
-        const enemySelected = 1;
-        let eName = enemyData[enemySelected].enemy_name;
-        eName = `${enemyData[enemySelected].enemy_name}_${numOfGreaterEnemy}`
-        enemyList[eName] = enemyData[enemySelected];
-        numOfGreaterEnemy--;
-    }
-
+    game.populateCharacters(characterList);
     game.populateEnemys(enemyList);
     game.populateGame();
-    console.log(game);
+
+    generateHTML();
+    document.getElementById("endTurnBtn").addEventListener("click",takeTurn);
+    takeTurn();
 }
 
 function generateAttackMenu(char) {
@@ -489,32 +449,40 @@ function enemyLives() {
 
 window.onload = function () {
     // Get data from database
-    console.log(`${url}/test/table/characters`);
-    const xhttp = new XMLHttpRequest();
-    const xhttpEnemy = new XMLHttpRequest();
-    xhttp.open('GET', `${url}/test/table/characters`);
-    xhttp.onload = function () {
-        if (xhttp.readyState === 4) {
-            if (xhttp.status === 200) {
-                xhttpEnemy.open('GET', `${url}/test/table/enemys`);
-                xhttpEnemy.onload = function () {
-                    if (xhttpEnemy.readyState === 4) {
-                        if (xhttpEnemy.status === 200) {
-                            const characters = JSON.parse(xhttp.responseText);
-                            const enemys = JSON.parse(xhttpEnemy.responseText);
-                            // Initialize the game
-                            generateGame(characters, enemys);
-                            generateHTML();
-                            document.getElementById("endTurnBtn").addEventListener("click",takeTurn);
-                            // Start the game
-                            takeTurn();
+    let queryStr = (location.href);
+    queryStr = queryStr.split("?").slice(-1)[0];
+    let queryArray = queryStr.split("&");
+    let queryList = [];
+    for (let entry in queryArray) {
+        let type = queryArray[entry].split("-")[0];
+        let val = queryArray[entry].split("-")[1];
+        queryList.push({type: type, id: val.split("=")[0], num: val.split("=")[1]});
+    }
+
+        let charList = {};
+        let enList = {};
+
+        for (let entry in queryList) {
+            for (let num = 1; num <= queryList[entry].num; num++) {
+                let query = queryList[entry];
+                const request = new XMLHttpRequest();
+                request.open('GET', `${url}/getUnit/${query.type}/${query.id}`, false);
+                request.onload = function () {
+                    if (request.readyState === 4) {
+                        if (request.status === 200) {
+                            if (query.type == "characters") {
+                                charList[entry] = JSON.parse(request.responseText)[0];
+                            }
+                            else {    
+                                enList[entry + "_" + num] = JSON.parse(request.responseText)[0];
+                                enList[entry + "_" + num].num = num;
+                            }
                         }
                     }
-                }
-                xhttpEnemy.send();
+                };
+                request.send();
             }
         }
-    }
-    xhttp.send();
+        generateGame(charList, enList);
 
 }

@@ -51,7 +51,7 @@ router.get('/getNames/:unitTable', function(req, res){
     else if (unitTable == 'enemys') {
          str = "enemy_name";
     }
-    let sql = `SELECT ${str}, description FROM rpg_project_db.${unitTable}`;
+    let sql = `SELECT ${str}, description, id_${unitTable} FROM rpg_project_db.${unitTable}`;
     pool.query(sql, function (err, result) {
     if (err) throw err;
     res.json(result);

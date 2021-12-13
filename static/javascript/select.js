@@ -1,31 +1,42 @@
 const url = "http://localhost:3000";
+const staticUrl = "..";
 
 function generateHTML(inData, enemyData) {
-    let output = '';
+    let output = {
+        display: "",
+        form: ""
+    };
     // Character data for database
     for (let entry in inData) {  
-        let charImage = "Jason Sprite.png"
-        if(inData[entry].char_name == "Monica"){
-            charImage = "Monica Sprite.png"
-        }
-        output += `<table id=${inData[entry].char_name} style="margin: 10px; padding: 5px; background-color: lightgray;">\
+        let charImage = `${inData[entry].char_name} Sprite.png`;
+
+        output.display += `<table id=${inData[entry].char_name} style="margin: 10px; padding: 5px; background-color: lightgray;">\
             <th>${inData[entry].char_name} </th>\
-            <tr><td align="center"><img src="../images/${charImage}" alt="${inData[entry].char_name}" class="en" id="${inData[entry].char_name}" style="height: 80px; width: 60px; display: block; border-color: red; border-style: none"></td></tr>\
+            <tr><td align="center"><img src="${staticUrl}/images/${charImage}" alt="${inData[entry].char_name}" class="en" id="${inData[entry].char_name}" style="height: 80px; width: 60px; display: block; border-color: red; border-style: none"></td></tr>\
             <tr><td align="center">${inData[entry].description}</tr></td>\
             </table>`;
+
+        output.form += `<label for="${inData[entry].char_name}">${inData[entry].char_name}:</label>\
+                    <input type="checkbox" id="${inData[entry].char_name}" name="characters-${inData[entry].id_characters}" value="1">\
+                    <br>`;
     }
     // Enemy data for database
     for (let entry in enemyData) {  
-        let enemyImage = "Lesser Demon Sprite.png"
-        if(enemyData[entry].enemy_name == "Greater Demon"){
-            enemyImage = "Greater Demon Sprite.png"
-        }
-        output += `<table id=${enemyData[entry].enemy_name} style="margin: 10px; padding: 5px; background-color: lightgray;">\
+        let enemyImage = `${enemyData[entry].enemy_name} Sprite.png`;
+        
+        output.display += `<table id=${enemyData[entry].enemy_name} style="margin: 10px; padding: 5px; background-color: lightgray;">\
             <th>${enemyData[entry].enemy_name} </th>\
-            <tr><td align="center"><img src="../images/${enemyImage}" alt="${enemyData[entry].enemy_name}" class="en" id="${enemyData[entry].enemy_name}" style="height: 80px; width: 60px; display: block; border-color: red; border-style: none"></td></tr>\
+            <tr><td align="center"><img src="${staticUrl}/images/${enemyImage}" alt="${enemyData[entry].enemy_name}" class="en" id="${enemyData[entry].enemy_name}" style="height: 80px; width: 60px; display: block; border-color: red; border-style: none"></td></tr>\
             <tr><td align="center">${enemyData[entry].description}</tr></td>\
             </table>`;
+
+        output.form += `<label for="numberOfLesserEnemy">Enter number of ${enemyData[entry].enemy_name}: </label>\
+        <input type="number" id="${enemyData[entry].enemy_name}" name="enemys-${enemyData[entry].id_enemys}" value="1" min="0" max="5" placeholder="Enter a number" required>\
+        <br>`;
     }
+
+    output.form += `<input type="submit" value="Start Game">`;
+
     return output;
 }
 
@@ -48,7 +59,8 @@ window.onload = function () {
                             const enemys = JSON.parse(xhttpEnemys.responseText);
                             let html = generateHTML(characters, enemys);
                             console.log('in xhttp');
-                            document.getElementById("container").innerHTML += html;
+                            document.getElementById("container").innerHTML += html.display;
+                            document.getElementById("select-form").innerHTML += html.form;
                         }
                     }
                 }
