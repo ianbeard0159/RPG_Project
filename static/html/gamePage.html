@@ -15,23 +15,23 @@
     <div data-role="page" id="StartGame" data-theme="a">
         <!-- +++++ HEADER +++++ -->
         <div data-role="header">
-            <div data-role="navbar">
-                <ul>
-                    <li><a href='/'>Home</a></li>
-                    <li><a href=/select>Select Character</a></li>
-                    <li><a href='/tutorial'>Tutorial</a></li>
-                </ul>
+            <div class="navbar">
+                <img src="../images/Logo Concept Clear.png" alt="some rpg game photo" class="logo">
+                <a href='/'>Home</a>
+                <a href=/select>Select Character</a>
+                <a href='/tutorial'>Tutorial</a>
             </div>
 
-            <img src="../images/Logo Concept Clear.png" alt="some rpg game photo" class="logo">
 
         </div>
         <div id='container' style="display: flex; align-items: flex-end;"></div>
-        <div id="menu">
-
+        <div class="menu-container">
+            <div id="menu">
+    
+            </div>
+            <input type="submit" value="End Turn" id="endTurnBtn"></input>   
+            <div id="game-log"></div> 
         </div>
-        <input type="submit" value="End Turn" id="endTurnBtn"></input>   
-        <div id="game-log"></div> 
 
         <!-- +++++ FOOTER +++++ -->
         <div data-role="footer">

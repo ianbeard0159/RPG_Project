@@ -1,4 +1,12 @@
-* {box-sizing:border-box}
+* {
+  box-sizing:border-box;
+  font-family: Helvetica, sans-serif;
+}
+
+body {
+  margin: 0px;
+  background-color: #cedbe0;
+}
 
 /* Slideshow container */
 .slideshow-container {
@@ -95,7 +103,7 @@
 
 .logo {
     max-height: 100px;
-    max-width: 100px;
+    max-width: 150px;
 }
 
  /* The Modal (background) */
@@ -136,18 +144,147 @@
     cursor: pointer;
   }
 
+  .spacing{
+    width: 100px;
+  }
+
+  #menu {
+    display: block;
+    float: inline-start;
+  }
+
+  .navbar {
+    width: 100%;
+    padding: 0 8px;
+
+    display: flex;
+    align-items: stretch;
+
+    background-color: #38454b;
+    box-shadow: 0 0 2px black;
+  }
+
+  .navbar a {
+    color: rgb(219, 239, 243);
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    
+  }
+
+  .navbar a:hover {
+    text-shadow: 0 0 2px white;
+    background-color: #283236;
+  }
+
+  .select-table img{
+    max-width: 200px;
+  }
+
+  #select-container {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  #character-container {
+    color:rgb(58, 50, 26);
+    margin-right: 8px;
+    border: 3px solid rgb(180, 161, 98);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(148, 133, 85);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  #character-container h3{
+    width: 100%;
+    margin: 0px;
+    display: flex;
+    padding: 16px;
+    justify-content: center;
+    background-color: rgb(180, 161, 98);
+  }
+  #enemy-container {
+    color:rgb(217, 205, 230);
+    margin-left: 8px;
+    border: 3px solid rgb(89, 78, 100);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(64, 53, 75);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  #enemy-container h3{
+    width: 100%;
+    margin: 0px;
+    display: flex;
+    padding: 16px;
+    justify-content: center;
+    background-color: rgb(89, 78, 100);
+  }
+  #character-content{
+    display: flex;
+  }
+  #character-content .select-table {
+    background-color: rgb(180, 161, 98);
+    margin: 8px;
+    border-radius: 8px;
+    border-top-right-radius: 20px;
+    overflow: hidden;
+  }
+  #enemy-content{
+    display: flex;
+  }
+  #enemy-content .select-table {
+    background-color: rgb(89, 78, 100);
+    margin: 8px;
+    border-radius: 8px;
+    border-top-right-radius: 20px;
+    overflow: hidden;
+  }
+  #form-container {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  #select-form {
+    width: fit-content;
+  }
+  .content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  #select-form h3 {
+    margin: 6px;
+  }
+  #form-container label {
+    margin-left: 16px;
+  }
+
+  /* Game Page */
+
+  #container {
+    margin: 24px;
+    padding: 16px;
+    background-color: rgb(142, 177, 179);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-evenly;
+  }
   .sprite{
     width: 100%;
     height: auto;
     margin: 10px;
     padding: 5px;
-  }
-
-  .unitTab{
-    margin: 10px;
-    padding: 5px;
-    background-color: lightgrey;
-    width: 100%;
   }
   .char-container{
     display: flex;
@@ -166,17 +303,58 @@
     width: 200px;
     margin: 10px;
   }
+  .unitTab {
+    background-color: rgb(180, 161, 98);
+    margin: 8px;
+    padding: 5px;
+    border-radius: 8px;
+    border-top-right-radius: 20px;
+    overflow: hidden;
+    width: 100%;
 
-  .spacing{
-    width: 100px;
+  }
+  .enTab {
+    background-color: rgb(64, 53, 75);
+    color:rgb(217, 205, 230);
+    margin: 8px;
+    padding: 5px;
+    border-radius: 8px;
+    border-top-right-radius: 20px;
+    overflow: hidden;
+    width: 100%;
+
+  }
+  .char-content {
+    display: flex;
+  }
+  .en-content {
+    display: flex;
   }
 
+  .menu-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 200px;
+  }
+  #endTurnBtn {
+    height: min-content;
+    margin: 8px;
+  }
   #menu {
-    display: block;
-    float: inline-start;
+    margin: 8px;
+  }
+  #menu p {
+    margin: 0;
   }
   #game-log {
+    background-color: cadetblue;
+    display: flex;
+    flex-direction: column;
     width: 600px;
     height: 400px;
-    overflow: scroll;
+    overflow-y: scroll;
+  }
+  #game-log p {
+    padding: 4px;
+    margin: 0;
   }
