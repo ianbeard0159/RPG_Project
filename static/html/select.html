@@ -14,28 +14,30 @@
     <!-- +++++++++++++++++++ SELECT GAME PAGE ++++++++++++++++++++ -->
     <div data-role="page" id="select" data-theme="a">
         <!-- +++++ HEADER +++++ -->
-        <div data-role="header">
-            <div data-role="navbar">
-                <ul>
-                    <li><a href='/'>Home</a></li>
-                    <li><a href='/tutorial'>Tutorial</a></li>
-                </ul>
+        <div class="header">
+            <div class="navbar">
+                <img src="../images/Logo Concept Clear.png" alt="some rpg game photo"
+                    class="logo">
+                <a href='/'>Home</a>
+                <a href='/tutorial'>Tutorial</a>
             </div>
-            <img src="../images/Logo Concept Clear.png" alt="some rpg game photo"
-                class="logo">
         </div>
 
         <!-- +++++ CONTENT +++++ -->
-        <div data-role="content" data-theme="b">
-            <h1 style="text-align: center;">Immortal Blade</h1>
+        <div class="content" data-theme="b">
+            <h1 style="text-align: center;">Character Select</h1>
 
 
-            <div id='container' style="display: flex"></div>
+            <div id='select-container'></div>
 
-            <h3>Please select your character and choose number of enemy</h3>
+            <div id="form-container">
+                <br>
+                <br>
+                <h3>Please select the characters and enemies you would like to fight with</h3>
+                <br>
                 <form id="select-form" name="selectForm" action="/game" method="GET">
-    
                 </form>
+            </div>
 
         </div>
 

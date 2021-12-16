@@ -6,13 +6,13 @@ import { GameClass } from './Classes/GameClass.js';
 let game = new GameClass();
 let selected = [];
 
-
-function gameLog(str) {
-    document.getElementById("game-log").innerHTML += `<p> - ${str}</p>`
+function gameLog(str, color = "cadetblue") {
+    document.getElementById("game-log").innerHTML = `<p style="background-color: ${color}"> - ${str}</p>` + document.getElementById("game-log").innerHTML;   
 }
 
 function generateHTML() {
     let output = '';
+    output += `<div class="char-content">`
     for (let char in game.characterList) {
         output += `<div class="char-container"><img src="${imgUrl}/images/${char} Sprite.png" class="sprite" id="${char}">
                     <table id=${char} class="unitTab">\
@@ -32,15 +32,17 @@ function generateHTML() {
 
         output += '</table> </div>';
     }
+    output += `</div>`
 
     //dramatic spacing
     output += '<div class="spacing"> </div>'
 
     // Enemy table generation
 
+    output += `<div class="en-content">`
     for (let enemy in game.enemyList) {
         output += `<div class="enemy-container"><img src="${imgUrl}/images/${enemy.split("_")[0]} Sprite.png" class="sprite"> 
-        <table id=${enemy}tab class="unitTab">\
+        <table id=${enemy}tab class="enTab">\
             <th>${enemy} </th>`;
         // Display all enemy fields
         for (let field in game.enemyList[enemy]) {
@@ -55,6 +57,7 @@ function generateHTML() {
         }
         output += `</table> </div>`;
     }
+    output += `</div>`
     document.getElementById("container").innerHTML = output;
 }
 
@@ -145,6 +148,7 @@ function generateGame(inData, enemyData) {
 function generateAttackMenu(char) {
     selected = [];
     let output = '';
+    output += `<label>${char}: </label>`;
     for (let attack in game.characterList[char].attackList) {
         output += `<input type=submit value="${attack}" id="${attack}" class="menu"></input>`
     }
@@ -172,10 +176,10 @@ function generateTargets() {
     else {
         minTargets = enemyKeys;
     }
-    let output = `<p>Select ${minTargets} target${(minTargets != 1) ? "s" : ""}`;
+    let output = `<p>Select ${minTargets} target${(minTargets != 1) ? "s" : ""} --`;
     // Create Checkboxes
     for (let enemy in game.enemyList) {
-        output += `<input type="checkbox" value="${enemy}" id="${enemy}" class="menu">${enemy}</input>`
+        output += `<input type="checkbox" value="${enemy}" id="${enemy}" class="menu">${enemy}</input> -- `
     }
     output += `<input type="button" id="performAttack" value="OK"></input>`;
     document.getElementById("menu").innerHTML = output;
@@ -271,7 +275,7 @@ function takeTurn() {
 
     if (game.turnOrder[unit] == 'enemy') {
         console.log("ENEMY_TURN: ", unit);
-        gameLog(`ENEMEY TURN: ${unit}`);
+        gameLog(`ENEMEY TURN: ${unit}`, "rgb(250, 136, 115)");
         // Enemy turn, fully automated
         const enemy = game.enemyList[unit];
         // Gains AP at start of turn
@@ -283,12 +287,12 @@ function takeTurn() {
         // Enemy uses each attack at its disposal for now
         //	(if it has enough AP)
         for (let attack in enemy.attackList) {
-            gameLog(`${unit} used ${attack}`);
+            gameLog(`${unit} used ${attack}`, "rgb(199, 131, 110)");
             const damageData = enemy.selectAttackTargets(attack);
             console.log(damageData);
             // End turn if it doesn’t have enough AP
             if (damageData == 'not enough ap') {
-                gameLog(`But ${unit} didn't have enough AP`);
+                gameLog(`But ${unit} didn't have enough AP`, "rgb(199, 131, 110)");
                 break;
             }
             else {
@@ -307,23 +311,23 @@ function takeTurn() {
                         else if (damageData[char_name][entry].result == "Crit") {
                             res = "critically hit";
                         }
-                        gameLog(`${unit} ${res} ${char_name}`)
+                        gameLog(`${unit} ${res} ${char_name}`, "rgb(199, 131, 110)");
                         const baseDamage = damageData[char_name][entry].damage;
                         const target = game.characterList[char_name]
                         const takeData = target.takeDamage(baseDamage);
                         console.log(char_name, takeData);
                         if (takeData.result != "taken" && takeData.result != "miss") {
-                            gameLog(`${char_name} ${takeData.result}`);
+                            gameLog(`${char_name} ${takeData.result}`, "rgb(199, 131, 110)");
                         }
                         if (takeData.damage != 0) {
-                            gameLog(`${char_name} took ${takeData.damage} damage`);
+                            gameLog(`${char_name} took ${takeData.damage} damage`, "rgb(199, 131, 110)");
                         }
                         // Change the aggro of the enemy towards the character
                         const char_status = target.state.status;
                         const aggroChange = 0 - damageData[char_name][entry].aggro;
                         enemy.changeAggro(char_name, aggroChange, char_status);
                         if (char_status == "Incapacitated") {
-                            gameLog(`${char_name} was defeated`);
+                            gameLog(`${char_name} was defeated`, "rgb(199, 131, 110)");
                         }
                         enemyLives();
                         generateHTML();
@@ -335,7 +339,7 @@ function takeTurn() {
     }
     else if (game.turnOrder[unit] == 'character') {
         console.log("CHARACTER_TURN: ", unit);
-        gameLog(`CHARACTER TURN ${unit}`);
+        gameLog(`CHARACTER TURN ${unit}`, "rgb(98, 178, 180)");
         // Character Turn (Needs Player Input) 
         const character = game.characterList[unit];
         if (character.state.status == "Incapacitated") {
